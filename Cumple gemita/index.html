@@ -402,7 +402,8 @@
                                     <svg id="pauseIcon1" class="w-5 h-5 sm:w-6 sm:h-6 text-white hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z"></path></svg>
                                 </button>
                             </div>
-                            <audio id="miAudio1" src="chachacha.mp3"></audio>
+                            <!-- SE CAMBIÓ A .MP3 EN MAYÚSCULAS -->
+                            <audio id="miAudio1" src="chachacha.MP3"></audio>
                         </div>
                         <div class="relative max-h-[80px] group-hover:max-h-[600px] transition-all duration-700 ease-in-out overflow-hidden bg-white">
                             <div class="p-5 italic text-gray-700 font-serif border-l-4 border-rose-400 text-left text-sm sm:text-base">
@@ -429,7 +430,8 @@
                                     <svg id="pauseIcon2" class="w-5 h-5 sm:w-6 sm:h-6 text-white hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z"></path></svg>
                                 </button>
                             </div>
-                            <audio id="miAudio2" src="conexion.mp3"></audio>
+                            <!-- SE CAMBIÓ A .MP3 EN MAYÚSCULAS -->
+                            <audio id="miAudio2" src="conexion.MP3"></audio>
                         </div>
                         <div class="relative max-h-[80px] group-hover:max-h-[600px] transition-all duration-700 ease-in-out overflow-hidden bg-white">
                             <div class="p-5 italic text-gray-700 font-serif border-l-4 border-purple-400 text-left text-sm sm:text-base">
@@ -456,7 +458,8 @@
                                     <svg id="pauseIcon3" class="w-5 h-5 sm:w-6 sm:h-6 text-white hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z"></path></svg>
                                 </button>
                             </div>
-                            <audio id="miAudio3" src="agua.mp3"></audio>
+                            <!-- SE CAMBIÓ A .MP3 EN MAYÚSCULAS -->
+                            <audio id="miAudio3" src="agua.MP3"></audio>
                         </div>
                         <div class="relative max-h-[80px] group-hover:max-h-[600px] transition-all duration-700 ease-in-out overflow-hidden bg-white">
                             <div class="p-5 italic text-gray-700 font-serif border-l-4 border-cyan-400 text-left text-sm sm:text-base">
@@ -873,6 +876,23 @@
             });
         }
 
+        // Función para mostrar notificaciones elegantes (reemplaza a la alerta fea)
+        function mostrarAviso(mensaje) {
+            const toast = document.createElement('div');
+            toast.className = 'fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-rose-500 text-white px-6 py-3 rounded-full shadow-2xl z-[200] text-sm text-center font-medium opacity-0 transition-opacity duration-500';
+            toast.innerText = mensaje;
+            document.body.appendChild(toast);
+            
+            // Mostrar
+            setTimeout(() => toast.classList.remove('opacity-0'), 10);
+            
+            // Ocultar y eliminar después de 3 segundos
+            setTimeout(() => {
+                toast.classList.add('opacity-0');
+                setTimeout(() => toast.remove(), 500);
+            }, 3500);
+        }
+
         // Reproductores Corregidos
         let isPlaying = { 1: false, 2: false, 3: false };
         function togglePlay(id) {
@@ -884,6 +904,7 @@
                 audio.pause();
                 playIcon.classList.remove('hidden'); 
                 pauseIcon.classList.add('hidden');
+                isPlaying[id] = false;
             } else {
                 // Pausar las demás si hay alguna sonando (Pausa Inteligente)
                 for(let i=1; i<=3; i++) {
@@ -895,19 +916,24 @@
                     }
                 }
                 
-                // Intentar reproducir (con mensaje de error si no encuentra el archivo)
+                // Cambiar el icono a "Pausa"
+                playIcon.classList.add('hidden'); 
+                pauseIcon.classList.remove('hidden');
+                isPlaying[id] = true;
+                
+                // Intentar reproducir (con mensaje bonito si no encuentra el archivo)
                 let playPromise = audio.play();
                 if (playPromise !== undefined) {
                     playPromise.catch(error => {
                         console.log("No se pudo reproducir el audio.", error);
-                        alert("Aviso: No se encontró el archivo de audio '" + audio.getAttribute('src') + "'. Recuerda guardarlo en la misma carpeta que este archivo HTML.");
+                        // Mostrar mensaje elegante y revertir el icono
+                        mostrarAviso("Aún no has subido el archivo de audio (.mp3) a la página.");
+                        playIcon.classList.remove('hidden'); 
+                        pauseIcon.classList.add('hidden');
+                        isPlaying[id] = false;
                     });
                 }
-
-                playIcon.classList.add('hidden'); 
-                pauseIcon.classList.remove('hidden');
             }
-            isPlaying[id] = !isPlaying[id];
         }
 
         // Lógica Estados de Ánimo
