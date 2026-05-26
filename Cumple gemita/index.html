@@ -1,1246 +1,770 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>¡Feliz Cumpleaños Gemita!</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>¡Feliz Cumpleaños Gemita!</title>
+<meta property="og:title" content="Para mi Kaoruko 🌸">
+<meta property="og:description" content="Tengo una sorpresa para ti, Gemita. Toca para abrir ✨">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fdf2f8;--glass:rgba(255,255,255,0.45);--glass-border:rgba(255,255,255,0.6);--glass-btn:rgba(255,255,255,0.7);--text:rgb(31,41,55);--text-2:rgb(75,85,99);--text-3:rgb(107,114,128);--card-bg:rgba(255,255,255,0.7);--input-bg:rgba(255,255,255,0.4);--msg-bg:rgba(255,255,255,0.6)}
+body{font-family:'Poppins',sans-serif;background-color:var(--bg);overflow-x:hidden;cursor:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><text y="24" font-size="24">🪄</text></svg>') 0 24,auto;transition:background-color .4s}
+a,button,.cursor-pointer,.scratch-canvas,input[type=range]{cursor:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><text y="24" font-size="24">✨</text></svg>') 16 16,pointer!important}
+.title-font{font-family:'Dancing Script',cursive}
+.glass-card{background:var(--glass);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--glass-border);box-shadow:0 10px 40px rgba(244,63,94,.08);transition:background .4s,border .4s}
+.glass-button{background:var(--glass-btn);backdrop-filter:blur(10px);border:1px solid var(--glass-border);box-shadow:0 4px 15px rgba(0,0,0,.05);transition:background .4s}
+.text-gradient{background:linear-gradient(135deg,#f43f5e,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.fade-in{animation:fadeIn 1.5s ease-in-out forwards;opacity:0}
+@keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.pulse-gift{animation:pulse 2.5s infinite}
+@keyframes pulse{0%{transform:scale(1);box-shadow:0 0 0 0 rgba(244,63,94,.4)}70%{transform:scale(1.05);box-shadow:0 0 0 15px rgba(244,63,94,0)}100%{transform:scale(1);box-shadow:0 0 0 0 rgba(244,63,94,0)}}
+.polaroid{background:#fff;padding:12px 12px 30px;box-shadow:0 10px 25px rgba(0,0,0,.08);transform:rotate(-3deg);transform-style:preserve-3d;border:1px solid rgba(0,0,0,.02);transition:all .4s ease}
+.polaroid:nth-child(even){transform:rotate(3deg)}
+.polaroid:nth-child(3n){transform:rotate(-1.5deg)}
+.polaroid:nth-child(4n){transform:rotate(2deg)}
+.polaroid:hover{box-shadow:0 20px 40px rgba(244,63,94,.15);transform:rotate(0deg) scale(1.04)!important;z-index:10}
+.polaroid-inner{transform:translateZ(40px)}
+.reveal{opacity:0;transform:translateY(40px);transition:all 1s cubic-bezier(.25,.46,.45,.94)}
+.reveal.active{opacity:1;transform:translateY(0)}
+.coupon-content{border:2px dashed;background:repeating-linear-gradient(45deg,rgba(255,255,255,.2),rgba(255,255,255,.2) 10px,rgba(255,255,255,.6) 10px,rgba(255,255,255,.6) 20px);backdrop-filter:blur(5px)}
+.coupon-rose{border-color:rgba(251,113,133,.5)}.coupon-blue{border-color:rgba(96,165,250,.5)}.coupon-purple{border-color:rgba(167,139,250,.5)}.coupon-emerald{border-color:rgba(52,211,153,.5)}
+.blob{position:absolute;filter:blur(80px);z-index:-1;opacity:.6;animation:moveBlobs 20s infinite alternate ease-in-out}
+@keyframes moveBlobs{0%{transform:translate(0,0) scale(1)}50%{transform:translate(30px,-50px) scale(1.1)}100%{transform:translate(-30px,20px) scale(.9)}}
+.firefly{position:absolute;border-radius:50%;background:#fff;box-shadow:0 0 10px #fff,0 0 20px #fef08a;pointer-events:none;animation:floatup 12s infinite linear,blink 2s infinite ease-in-out;z-index:0;opacity:0}
+@keyframes floatup{0%{transform:translateY(100vh) translateX(0);opacity:0}20%{opacity:.6}80%{opacity:.6}100%{transform:translateY(-20vh) translateX(100px);opacity:0}}
+@keyframes blink{0%,100%{transform:scale(1)}50%{transform:scale(1.5)}}
+.petal{position:absolute;background:linear-gradient(135deg,#ffb7c5,#ff8da1);border-radius:15px 0;opacity:.8;pointer-events:none;animation:sakuraFall linear forwards;box-shadow:inset 2px 2px 4px rgba(255,255,255,.5)}
+@keyframes sakuraFall{0%{transform:translate(0,-10vh) rotate3d(1,1,0,0deg) scale(0);opacity:0}10%{opacity:.9;transform:translate(calc(var(--end-x)*.1),10vh) rotate3d(1,1.5,.5,36deg) scale(var(--scale))}100%{transform:translate(var(--end-x),110vh) rotate3d(1,.5,1,var(--rot)) scale(var(--scale));opacity:0}}
+.lb-nav-btn{background:rgba(255,255,255,.15);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.3);transition:all .2s}
+.lb-nav-btn:hover{background:rgba(244,63,94,.7)}
+.cat-btn{padding:.5rem 1.25rem;border-radius:9999px;font-size:.85rem;font-weight:500;transition:all .2s;border:1px solid transparent}
+.cat-btn.active{background:linear-gradient(135deg,#f43f5e,#a855f7);color:#fff;box-shadow:0 4px 15px rgba(244,63,94,.35)}
+.cat-btn:not(.active){background:rgba(255,255,255,.6);color:#6b7280;border-color:rgba(255,255,255,.8)}
+.cat-btn:not(.active):hover{background:rgba(255,255,255,.9);color:#f43f5e}
+@keyframes popIn{from{opacity:0;transform:scale(.8) rotate(-5deg)}to{opacity:1;transform:inherit}}
+.polaroid{animation:popIn .5s ease backwards}
+.msg-card{background:var(--msg-bg);border:1px solid rgba(255,255,255,.8);animation:popIn .4s ease backwards;transition:background .4s}
 
-    <meta property="og:title" content="Para mi Kaoruko 🌸">
-    <meta property="og:description" content="Tengo una sorpresa para ti, Gemita. Toca para abrir ✨">
-    <meta property="og:type" content="website">
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <style>
-        :root {
-            --rose: #f43f5e;
-            --rose-light: #fda4af;
-            --purple: #a855f7;
-            --pink: #ec4899;
-            --cream: #fdf2f8;
-        }
+/* ── DARK MODE ────────────────── */
+body.dark{--bg:#100018;--glass:rgba(40,8,60,.55);--glass-border:rgba(255,255,255,.08);--glass-btn:rgba(40,8,60,.7);--card-bg:rgba(40,8,60,.7);--input-bg:rgba(40,8,60,.5);--msg-bg:rgba(60,15,85,.6);background-color:#100018}
+body.dark .text-gray-800{color:#e8d5f5}
+body.dark .text-gray-700{color:#d4b8e0}
+body.dark .text-gray-600{color:#b89fc8}
+body.dark .text-gray-500{color:#9a7db0}
+body.dark .text-gray-400{color:#7a5e90}
+body.dark .polaroid{background:#1e0830}
+body.dark .bg-white\/70,.dark .bg-white\/60,.dark .bg-white\/50,.dark .bg-white\/40{background:var(--card-bg)!important}
+body.dark textarea{color:#e8d5f5!important}
+body.dark .blob{opacity:.15}
+body.dark .scratch-canvas{filter:invert(.1)}
+body.dark .border-white{border-color:rgba(255,255,255,.1)!important}
+body.dark .cat-btn:not(.active){background:rgba(40,8,60,.7);color:#b89fc8;border-color:rgba(255,255,255,.1)}
+body.dark .msg-card{border-color:rgba(255,255,255,.1)}
 
-        * { box-sizing: border-box; }
+/* ── FINALE ──────────────────── */
+#finale-screen{background:radial-gradient(ellipse at center,#1a003a 0%,#0a0015 100%)}
+.finale-glow{animation:fglow 2.5s ease-in-out infinite alternate}
+@keyframes fglow{from{text-shadow:0 0 20px rgba(244,63,94,.4)}to{text-shadow:0 0 80px rgba(168,85,247,.9),0 0 120px rgba(244,63,94,.5)}}
 
-        body { 
-            font-family: 'Nunito', sans-serif; 
-            background-color: var(--cream); 
-            overflow-x: hidden;
-            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><text y="24" font-size="24">🪄</text></svg>') 0 24, auto;
-        }
-        
-        a, button, .cursor-pointer, .scratch-canvas, input[type="range"] {
-            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><text y="24" font-size="24">✨</text></svg>') 16 16, pointer !important;
-        }
+/* ── EASTER EGG ──────────────── */
+#easter-overlay{backdrop-filter:blur(12px);background:rgba(0,0,0,.75)}
+.easter-secret{position:relative}
+.easter-secret::after{content:'✨';position:absolute;top:-6px;right:-14px;font-size:9px;opacity:0;transition:opacity .3s;pointer-events:none}
+.easter-secret:hover::after{opacity:.4}
 
-        .title-font { font-family: 'Playfair Display', serif; }
-        
-        /* GLASSMORPHISM */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.7);
-            box-shadow: 0 8px 32px rgba(244, 63, 94, 0.08), 0 2px 8px rgba(0,0,0,0.04);
-        }
-
-        .glass-button {
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.85);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
-        }
-
-        .text-gradient {
-            background: linear-gradient(135deg, #f43f5e, #a855f7);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        /* ANIMACIONES ENTRADA */
-        .fade-in { animation: fadeIn 1.2s cubic-bezier(0.23, 1, 0.32, 1) forwards; opacity: 0; }
-        @keyframes fadeIn { 
-            from { opacity: 0; transform: translateY(30px) scale(0.97); } 
-            to { opacity: 1; transform: translateY(0) scale(1); } 
-        }
-        
-        /* INTRO SCREEN */
-        #intro-screen {
-            transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-        #intro-screen.closing {
-            opacity: 0;
-            transform: scale(1.05);
-            pointer-events: none;
-        }
-
-        /* MAIN CONTENT ENTRADA */
-        #main-content {
-            opacity: 0;
-            transition: opacity 1s ease 0.5s;
-        }
-        #main-content.visible {
-            opacity: 1;
-        }
-
-        /* PULSE GIFT */
-        .pulse-gift { animation: pulse 2.5s infinite; }
-        @keyframes pulse { 
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.4); } 
-            70% { transform: scale(1.06); box-shadow: 0 0 0 20px rgba(244, 63, 94, 0); } 
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(244, 63, 94, 0); } 
-        }
-
-        /* POLAROID */
-        .polaroid {
-            background: #ffffff; 
-            padding: 12px 12px 36px 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.10);
-            transform: rotate(-3deg); 
-            transform-style: preserve-3d;
-            border: 1px solid rgba(0,0,0,0.03);
-            transition: all 0.4s ease;
-        }
-        .polaroid:nth-child(even) { transform: rotate(2.5deg); }
-        .polaroid:nth-child(3n) { transform: rotate(-1.5deg); }
-        .polaroid:hover { box-shadow: 0 25px 50px rgba(244,63,94,0.2); transform: rotate(0deg) scale(1.03) !important; }
-
-        /* REVEAL */
-        .reveal { opacity: 0; transform: translateY(50px); transition: all 1.1s cubic-bezier(0.23, 1, 0.32, 1); }
-        .reveal.active { opacity: 1; transform: translateY(0); }
-        
-        /* CUPONES */
-        .coupon-content {
-            border: 2px dashed;
-            background: repeating-linear-gradient(45deg, rgba(255,255,255,0.2), rgba(255,255,255,0.2) 10px, rgba(255,255,255,0.6) 10px, rgba(255,255,255,0.6) 20px);
-            backdrop-filter: blur(5px);
-        }
-        .coupon-rose { border-color: rgba(251, 113, 133, 0.6); }
-        .coupon-blue { border-color: rgba(96, 165, 250, 0.6); }
-        .coupon-purple { border-color: rgba(167, 139, 250, 0.6); }
-        .coupon-emerald { border-color: rgba(52, 211, 153, 0.6); }
-
-        /* BLOBS FONDO */
-        .blob {
-            position: absolute; filter: blur(90px); z-index: -1; opacity: 0.5;
-            animation: moveBlobs 22s infinite alternate ease-in-out;
-        }
-        @keyframes moveBlobs { 
-            0% { transform: translate(0px, 0px) scale(1); } 
-            50% { transform: translate(40px, -60px) scale(1.12); } 
-            100% { transform: translate(-40px, 25px) scale(0.88); } 
-        }
-
-        /* LUCIÉRNAGAS */
-        .firefly {
-            position: absolute; border-radius: 50%; background: #fff;
-            box-shadow: 0 0 8px #fff, 0 0 18px #fef08a; pointer-events: none;
-            animation: floatup 12s infinite linear, blink 2.5s infinite ease-in-out;
-            z-index: 0; opacity: 0;
-        }
-        @keyframes floatup {
-            0% { transform: translateY(100vh) translateX(0); opacity: 0; }
-            20% { opacity: 0.7; }
-            80% { opacity: 0.7; }
-            100% { transform: translateY(-20vh) translateX(80px); opacity: 0; }
-        }
-        @keyframes blink { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.6); } }
-
-        /* PÉTALOS SAKURA */
-        .petal {
-            position: absolute;
-            background: linear-gradient(135deg, #ffb7c5, #ff8da1);
-            border-radius: 15px 0 15px 0;
-            opacity: 0.85;
-            pointer-events: none;
-            animation: sakuraFall linear forwards;
-            box-shadow: inset 2px 2px 5px rgba(255,255,255,0.6), 0 2px 6px rgba(0,0,0,0.08);
-        }
-        @keyframes sakuraFall {
-            0% { transform: translate(0, -10vh) rotate3d(1, 1, 0, 0deg) scale(0); opacity: 0; }
-            10% { opacity: 0.9; transform: translate(calc(var(--end-x) * 0.1), 10vh) rotate3d(1, 1.5, 0.5, 36deg) scale(var(--scale)); }
-            100% { transform: translate(var(--end-x), 110vh) rotate3d(1, 0.5, 1, var(--rot)) scale(var(--scale)); opacity: 0; }
-        }
-
-        /* CARDS MULTIVERSO - GLOW HOVER */
-        .universe-card {
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-            position: relative;
-        }
-        .universe-card::before {
-            content: '';
-            position: absolute;
-            inset: -1px;
-            border-radius: inherit;
-            opacity: 0;
-            transition: opacity 0.4s;
-            z-index: -1;
-        }
-        .universe-card:hover::before { opacity: 1; }
-        .universe-card:hover { transform: translateY(-8px) scale(1.01); }
-
-        .glow-yellow:hover { box-shadow: 0 20px 40px rgba(234, 179, 8, 0.25); }
-        .glow-red:hover { box-shadow: 0 20px 40px rgba(239, 68, 68, 0.25); }
-        .glow-gray:hover { box-shadow: 0 20px 40px rgba(100, 116, 139, 0.25); }
-        .glow-slate:hover { box-shadow: 0 20px 40px rgba(71, 85, 105, 0.25); }
-        .glow-blue:hover { box-shadow: 0 20px 40px rgba(96, 165, 250, 0.25); }
-        .glow-teal:hover { box-shadow: 0 20px 40px rgba(20, 184, 166, 0.25); }
-        .glow-fuchsia:hover { box-shadow: 0 20px 40px rgba(192, 38, 211, 0.25); }
-        .glow-pink:hover { box-shadow: 0 20px 40px rgba(244, 114, 182, 0.4); }
-
-        /* LOADING DOTS */
-        .loading-dots span {
-            display: inline-block;
-            width: 6px; height: 6px;
-            border-radius: 50%;
-            background: var(--rose);
-            animation: bounce 1.2s infinite;
-            margin: 0 2px;
-        }
-        .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
-        .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
-        @keyframes bounce { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-8px); } }
-
-        /* BOTÓN VOLVER ARRIBA */
-        #btn-top {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            z-index: 200;
-            opacity: 0;
-            transform: translateY(20px) scale(0.8);
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-            pointer-events: none;
-        }
-        #btn-top.visible {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-            pointer-events: all;
-        }
-
-        /* TEXTAREA ESTILO */
-        textarea:focus { box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.2); }
-
-        /* SECCIONES MAIN */
-        #main-content > section, #main-content > header { position: relative; z-index: 10; }
-
-        /* SCROLL PROGRESS */
-        #scroll-progress {
-            background: linear-gradient(90deg, #f43f5e, #ec4899, #a855f7);
-            box-shadow: 0 0 12px rgba(244, 63, 94, 0.6);
-        }
-
-        /* REGALO BUTTON */
-        .gift-shine {
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.3) 50%, transparent 70%);
-            transform: rotate(45deg);
-            animation: shine 3s infinite;
-        }
-        @keyframes shine {
-            0% { transform: translateX(-100%) rotate(45deg); }
-            50%, 100% { transform: translateX(100%) rotate(45deg); }
-        }
-
-        /* PARTICLES BURST on open */
-        .particle {
-            position: fixed;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9999;
-            animation: particleBurst 1s cubic-bezier(0.23, 1, 0.32, 1) forwards;
-        }
-        @keyframes particleBurst {
-            0% { transform: translate(0,0) scale(1); opacity: 1; }
-            100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
-        }
-
-        /* TOAST */
-        .toast {
-            position: fixed;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%) translateY(20px);
-            background: rgba(244, 63, 94, 0.92);
-            backdrop-filter: blur(12px);
-            color: white;
-            padding: 0.75rem 1.75rem;
-            border-radius: 9999px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            z-index: 9000;
-            opacity: 0;
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-            white-space: nowrap;
-            box-shadow: 0 8px 25px rgba(244, 63, 94, 0.4);
-            border: 1px solid rgba(255,255,255,0.3);
-        }
-        .toast.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-
-        /* ESTADO ÁNIMO BTN */
-        .animo-btn {
-            transition: all 0.3s;
-            position: relative;
-        }
-        .animo-btn:hover { transform: scale(1.2) rotate(-5deg); }
-        .animo-btn.active { transform: scale(1.25); filter: drop-shadow(0 0 8px rgba(244,63,94,0.5)); }
-    </style>
+/* ── MOBILE ───────────────────── */
+@media(max-width:640px){
+  .title-font.text-7xl,.title-font.text-8xl{font-size:3.2rem}
+  .title-font.text-5xl{font-size:2.2rem}
+  .title-font.text-6xl{font-size:2.8rem}
+  section.glass-card.p-10,.glass-card.p-10,.glass-card.p-12,.glass-card.p-14{padding:1.5rem}
+  .md\:p-14,.md\:p-16{padding:1.5rem}
+  .polaroid{padding:8px 8px 22px}
+  .polaroid-inner.w-full.h-64{height:180px}
+  .rounded-\[3rem\]{border-radius:1.75rem}
+  .rounded-\[2\.5rem\]{border-radius:1.5rem}
+  .text-lg{font-size:1rem}
+  .text-xl{font-size:1.05rem}
+  .scratch-canvas{touch-action:none}
+  .w-16.h-16{width:3.25rem;height:3.25rem}
+  #floating-btns{bottom:.75rem;right:.5rem;gap:.5rem}
+  #floating-btns button{width:2.75rem;height:2.75rem;font-size:1rem}
+}
+</style>
 </head>
 <body class="min-h-screen text-gray-800 flex flex-col items-center justify-center relative">
 
-    <!-- CONTENEDOR PÉTALOS -->
-    <div id="sakura-container" class="fixed inset-0 pointer-events-none z-[160] overflow-hidden"></div>
+<!-- PÉTALOS -->
+<div id="sakura-container" class="fixed inset-0 pointer-events-none z-[160] overflow-hidden"></div>
 
-    <!-- BLOBS DE FONDO -->
-    <div class="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-[-1]">
-        <div class="blob bg-rose-300 w-[450px] h-[450px] rounded-full top-[-12%] left-[-12%]"></div>
-        <div class="blob bg-purple-300 w-[550px] h-[550px] rounded-full top-[35%] right-[-18%]" style="animation-delay: -6s;"></div>
-        <div class="blob bg-orange-200 w-96 h-96 rounded-full bottom-[-12%] left-[18%]" style="animation-delay: -11s;"></div>
-        <div class="blob bg-pink-200 w-72 h-72 rounded-full top-[60%] left-[10%]" style="animation-delay: -3s;"></div>
-    </div>
+<!-- BLOBS -->
+<div class="fixed inset-0 overflow-hidden pointer-events-none z-[-1]">
+  <div class="blob bg-rose-300 w-96 h-96 rounded-full top-[-10%] left-[-10%]"></div>
+  <div class="blob bg-purple-300 w-[500px] h-[500px] rounded-full top-[40%] right-[-15%]" style="animation-delay:-5s"></div>
+  <div class="blob bg-orange-200 w-80 h-80 rounded-full bottom-[-10%] left-[20%]" style="animation-delay:-10s"></div>
+</div>
 
-    <!-- BARRA PROGRESO -->
-    <div class="fixed top-0 left-0 w-full h-1.5 z-[150] bg-transparent pointer-events-none">
-        <div id="scroll-progress" class="h-full w-0 rounded-r-full transition-all duration-150 ease-out"></div>
-    </div>
+<!-- BARRA DE PROGRESO -->
+<div class="fixed top-0 left-0 w-full h-1.5 z-[150] pointer-events-none">
+  <div id="scroll-progress" class="h-full bg-gradient-to-r from-rose-400 via-pink-500 to-purple-500 w-0 rounded-r-full shadow-[0_0_10px_rgba(244,63,94,.8)] transition-all duration-150"></div>
+</div>
 
-    <!-- LUCIÉRNAGAS -->
-    <div id="fireflies-container" class="fixed inset-0 pointer-events-none overflow-hidden hidden"></div>
+<!-- LUCIÉRNAGAS -->
+<div id="fireflies-container" class="fixed inset-0 pointer-events-none overflow-hidden hidden"></div>
 
-    <!-- BOTÓN VOLVER ARRIBA -->
-    <button id="btn-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Volver arriba"
-        class="glass-card w-12 h-12 rounded-full flex items-center justify-center text-rose-500 hover:bg-rose-50 hover:scale-110 transition-all shadow-lg">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/>
+<!-- BOTONES FLOTANTES -->
+<div id="floating-btns" class="fixed bottom-6 right-4 z-[180] flex flex-col gap-3">
+  <button onclick="toggleDark()" id="dark-btn" title="Cambiar tema" class="glass-button w-12 h-12 rounded-full flex items-center justify-center text-xl shadow-xl hover:scale-110 transition-transform focus:outline-none border border-white/30">🌙</button>
+</div>
+
+<!-- ══════════════════════════════════ -->
+<!-- PANTALLA 1: REGALO               -->
+<!-- ══════════════════════════════════ -->
+<div id="intro-screen" class="min-h-screen w-full flex flex-col items-center justify-center p-4 relative z-20">
+  <div class="glass-card p-12 rounded-[3rem] flex flex-col items-center max-w-lg w-full">
+    <h1 class="title-font text-5xl md:text-6xl text-gradient mb-10 text-center">Tengo una sorpresa para ti...</h1>
+    <button onclick="abrirRegalo()" class="group cursor-pointer focus:outline-none hover:scale-105 transition-transform pulse-gift">
+      <div class="bg-gradient-to-tr from-rose-400 to-pink-500 p-8 rounded-full shadow-[0_10px_30px_rgba(244,63,94,.4)] group-hover:shadow-[0_15px_40px_rgba(244,63,94,.6)] transition-all">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/>
         </svg>
+      </div>
     </button>
+    <p class="mt-8 text-rose-500 font-medium text-lg tracking-widest uppercase">Toca para abrir</p>
+  </div>
+</div>
 
-    <!-- ═══════════════════════════════════════ -->
-    <!-- PANTALLA 1: EL REGALO -->
-    <!-- ═══════════════════════════════════════ -->
-    <div id="intro-screen" class="min-h-screen w-full flex flex-col items-center justify-center p-4 relative z-20">
-        <div class="glass-card p-12 rounded-[3rem] flex flex-col items-center max-w-lg w-full shadow-[0_20px_60px_rgba(244,63,94,0.15)]">
-            
-            <div class="text-center mb-8">
-                <p class="text-rose-400 font-semibold tracking-widest uppercase text-sm mb-3">Para ti, Gemita 🌸</p>
-                <h1 class="title-font text-5xl md:text-6xl text-gradient leading-tight">
-                    Tengo una<br>sorpresa para ti...
-                </h1>
-            </div>
+<!-- ══════════════════════════════════ -->
+<!-- PANTALLA 2: CONTENIDO PRINCIPAL  -->
+<!-- ══════════════════════════════════ -->
+<div id="main-content" class="hidden w-full max-w-5xl px-4 py-16 flex-col items-center relative">
 
-            <button onclick="abrirRegalo(this)" class="group relative cursor-pointer focus:outline-none mt-4 pulse-gift" aria-label="Abrir regalo de cumpleaños">
-                <div class="relative bg-gradient-to-tr from-rose-400 via-pink-500 to-purple-500 p-9 rounded-full shadow-[0_15px_40px_rgba(244,63,94,0.45)] group-hover:shadow-[0_20px_50px_rgba(244,63,94,0.65)] transition-all overflow-hidden">
-                    <div class="gift-shine absolute inset-0"></div>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-white relative z-10 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
-                    </svg>
-                </div>
-            </button>
+  <!-- Encabezado -->
+  <header class="text-center mb-16 fade-in" style="animation-delay:.2s">
+    <h1 onclick="triggerEaster('titulo')" class="easter-secret title-font text-7xl md:text-8xl text-gradient mb-2 drop-shadow-md cursor-pointer select-none">¡Feliz Cumpleaños!</h1>
+    <h2 class="text-3xl md:text-4xl text-rose-400 font-light mt-4 tracking-wider">Gemita</h2>
+  </header>
 
-            <p class="mt-8 text-rose-400 font-semibold text-base tracking-[0.3em] uppercase animate-pulse">✨ Toca para abrir ✨</p>
+  <!-- Carta -->
+  <section class="glass-card p-10 md:p-14 rounded-[2.5rem] mb-24 fade-in w-full max-w-3xl mx-auto" style="animation-delay:.6s">
+    <div class="mb-8 flex justify-center">
+      <div onclick="triggerEaster('corazon')" class="easter-secret bg-rose-100 p-4 rounded-full cursor-pointer hover:scale-110 transition-transform select-none">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-rose-500" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
+        </svg>
+      </div>
+    </div>
+    <div class="space-y-6 text-lg md:text-xl text-gray-700 leading-relaxed text-center font-medium">
+      <p>Quería hacer algo diferente para ti en este día tan especial. Eres una persona increíble, llena de luz, y cada momento contigo ha sido mágico.</p>
+      <p>Espero que este nuevo año de vida te traiga muchísimas sonrisas, éxitos y momentos inolvidables. Gracias por existir y por todo lo que compartimos.</p>
+      <p class="font-semibold text-gradient mt-8 title-font text-4xl block">¡Que todos tus deseos se cumplan!</p>
+    </div>
+  </section>
+
+  <!-- GALERÍA -->
+  <section class="w-full fade-in" style="animation-delay:1s">
+    <h3 class="title-font text-5xl text-rose-500 text-center mb-4">Nuestros Momentos</h3>
+    <p class="text-center text-gray-500 text-sm mb-8">Toca una foto para ampliarla · Arrastra para el efecto 3D</p>
+    <div class="flex flex-wrap justify-center gap-3 mb-10">
+      <button class="cat-btn active" onclick="filtrarGaleria('todos',this)">Todos</button>
+      <button class="cat-btn" onclick="filtrarGaleria('especiales',this)">⭐ Especiales</button>
+      <button class="cat-btn" onclick="filtrarGaleria('juntos',this)">💑 Juntos</button>
+      <button class="cat-btn" onclick="filtrarGaleria('momentos',this)">📸 Momentos</button>
+    </div>
+    <div id="gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 px-4">
+      <!-- Las fotos se generan en JS desde el array FOTOS -->
+    </div>
+    <p id="photo-count" class="text-center text-sm text-gray-400 mt-6 font-light">9 recuerdos · Toca para agrandar</p>
+  </section>
+
+  <!-- TIEMPO JUNTOS -->
+  <section class="w-full mt-32 reveal flex flex-col items-center px-4">
+    <h3 class="title-font text-5xl text-rose-500 text-center mb-4">Nuestro Tiempo</h3>
+    <p class="text-gray-600 text-center mb-10 max-w-lg text-lg">Desde el 7 de febrero a las 3:30 am, cada segundo a tu lado cuenta...</p>
+    <div class="flex flex-wrap justify-center gap-4 md:gap-6 text-center">
+      <div class="glass-card p-6 rounded-[2rem] min-w-[80px] md:min-w-[120px] hover:-translate-y-2 transition-transform"><span id="t-dias" class="text-4xl md:text-5xl font-bold text-gradient">0</span><p class="text-xs md:text-sm uppercase tracking-widest text-gray-500 mt-2 font-medium">Días</p></div>
+      <div class="glass-card p-6 rounded-[2rem] min-w-[80px] md:min-w-[120px] hover:-translate-y-2 transition-transform"><span id="t-horas" class="text-4xl md:text-5xl font-bold text-gradient">0</span><p class="text-xs md:text-sm uppercase tracking-widest text-gray-500 mt-2 font-medium">Horas</p></div>
+      <div class="glass-card p-6 rounded-[2rem] min-w-[80px] md:min-w-[120px] hover:-translate-y-2 transition-transform"><span id="t-minutos" class="text-4xl md:text-5xl font-bold text-gradient">0</span><p class="text-xs md:text-sm uppercase tracking-widest text-gray-500 mt-2 font-medium">Min</p></div>
+      <div class="glass-card p-6 rounded-[2rem] min-w-[80px] md:min-w-[120px] hover:-translate-y-2 transition-transform"><span id="t-segundos" class="text-4xl md:text-5xl font-bold text-gradient animate-pulse">0</span><p class="text-xs md:text-sm uppercase tracking-widest text-gray-500 mt-2 font-medium">Seg</p></div>
+    </div>
+  </section>
+
+  <!-- CUENTA REGRESIVA -->
+  <section class="w-full mt-20 reveal flex flex-col items-center px-4">
+    <h3 class="title-font text-5xl text-purple-500 text-center mb-2">Nuestro 1er Aniversario</h3>
+    <p class="text-gray-600 text-center mb-10 max-w-lg">7 de febrero de 2027 — faltan...</p>
+    <div class="flex flex-wrap justify-center gap-4 md:gap-6 text-center">
+      <div class="glass-card p-6 rounded-[2rem] min-w-[80px] md:min-w-[120px] hover:-translate-y-2 transition-transform border border-purple-200/30"><span id="cr-dias" class="text-4xl md:text-5xl font-bold" style="background:linear-gradient(135deg,#a855f7,#6366f1);-webkit-background-clip:text;-webkit-text-fill-color:transparent">0</span><p class="text-xs md:text-sm uppercase tracking-widest text-gray-500 mt-2 font-medium">Días</p></div>
+      <div class="glass-card p-6 rounded-[2rem] min-w-[80px] md:min-w-[120px] hover:-translate-y-2 transition-transform border border-purple-200/30"><span id="cr-horas" class="text-4xl md:text-5xl font-bold" style="background:linear-gradient(135deg,#a855f7,#6366f1);-webkit-background-clip:text;-webkit-text-fill-color:transparent">0</span><p class="text-xs md:text-sm uppercase tracking-widest text-gray-500 mt-2 font-medium">Horas</p></div>
+      <div class="glass-card p-6 rounded-[2rem] min-w-[80px] md:min-w-[120px] hover:-translate-y-2 transition-transform border border-purple-200/30"><span id="cr-minutos" class="text-4xl md:text-5xl font-bold" style="background:linear-gradient(135deg,#a855f7,#6366f1);-webkit-background-clip:text;-webkit-text-fill-color:transparent">0</span><p class="text-xs md:text-sm uppercase tracking-widest text-gray-500 mt-2 font-medium">Min</p></div>
+      <div class="glass-card p-6 rounded-[2rem] min-w-[80px] md:min-w-[120px] hover:-translate-y-2 transition-transform border border-purple-200/30"><span id="cr-segundos" class="text-4xl md:text-5xl font-bold animate-pulse" style="background:linear-gradient(135deg,#a855f7,#6366f1);-webkit-background-clip:text;-webkit-text-fill-color:transparent">0</span><p class="text-xs md:text-sm uppercase tracking-widest text-gray-500 mt-2 font-medium">Seg</p></div>
+    </div>
+  </section>
+
+  <!-- COSAS QUE ME ENCANTAN -->
+  <section class="w-full mt-32 reveal">
+    <h3 class="title-font text-5xl text-rose-500 text-center mb-12">Cosas que me encantan de ti</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 px-4">
+      <div class="glass-card p-8 rounded-3xl text-center hover:-translate-y-3 transition-transform duration-300"><div class="text-5xl mb-5">✨</div><h4 class="text-xl font-semibold text-rose-500 mb-3">Tu Sonrisa</h4><p class="text-gray-600 text-sm leading-relaxed">Ilumina cualquier lugar al que llegas, y sobre todo mi día.</p></div>
+      <div class="glass-card p-8 rounded-3xl text-center hover:-translate-y-3 transition-transform duration-300"><div class="text-5xl mb-5">🧠</div><h4 class="text-xl font-semibold text-rose-500 mb-3">Tu Inteligencia</h4><p class="text-gray-600 text-sm leading-relaxed">Me encanta escucharte hablar de lo que te apasiona y aprender de ti.</p></div>
+      <div class="glass-card p-8 rounded-3xl text-center hover:-translate-y-3 transition-transform duration-300"><div class="text-5xl mb-5">😂</div><h4 class="text-xl font-semibold text-rose-500 mb-3">Tu Humor</h4><p class="text-gray-600 text-sm leading-relaxed">Nadie me hace reír tanto como tú, incluso en los peores momentos.</p></div>
+      <div class="glass-card p-8 rounded-3xl text-center hover:-translate-y-3 transition-transform duration-300"><div class="text-5xl mb-5">❤️</div><h4 class="text-xl font-semibold text-rose-500 mb-3">Tu Corazón</h4><p class="text-gray-600 text-sm leading-relaxed">Eres la persona más amable, tierna y especial que conozco.</p></div>
+    </div>
+  </section>
+
+  <!-- RAZONES -->
+  <section class="w-full mt-32 reveal flex flex-col items-center px-4">
+    <h3 class="title-font text-5xl text-rose-500 text-center mb-4">Un millón de razones...</h3>
+    <p class="text-gray-600 text-center mb-10 text-lg">Toca la carta para descubrir por qué me gustas tanto.</p>
+    <button onclick="mostrarRazon()" class="group glass-button p-10 rounded-[3rem] hover:bg-white/80 transition-all duration-300 hover:-translate-y-2 focus:outline-none shadow-xl">
+      <div class="text-7xl group-hover:scale-110 transition-transform">💌</div>
+    </button>
+    <div id="caja-razon" class="mt-10 glass-card p-8 rounded-3xl border-l-4 border-l-rose-400 w-full max-w-xl min-h-[120px] flex items-center justify-center opacity-0 translate-y-4 transition-all duration-500 hidden">
+      <p id="texto-razon" class="text-gray-800 text-xl font-serif italic text-center leading-relaxed"></p>
+    </div>
+  </section>
+
+  <!-- MULTIVERSO -->
+  <section class="w-full mt-32 reveal">
+    <h3 class="title-font text-5xl text-rose-500 text-center mb-4">En nuestro propio universo...</h3>
+    <p class="text-gray-600 text-center mb-6 max-w-2xl mx-auto px-4 text-lg">Porque conectamos en más de un mundo, y te aseguro que en todos te volvería a elegir.</p>
+    <div class="flex justify-center mb-10">
+      <button onclick="hacerFlorecer()" class="glass-button px-6 py-3 rounded-full text-rose-500 font-semibold hover:bg-rose-50 hover:shadow-lg transition-all flex items-center gap-3 group focus:outline-none active:scale-95">
+        <span class="text-2xl group-hover:rotate-180 transition-transform duration-700">🌸</span>Haz florecer la pantalla
+      </button>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4 max-w-6xl mx-auto">
+      <div class="glass-card p-8 rounded-3xl border-t-4 border-t-yellow-400 hover:-translate-y-2 transition-all duration-300 group"><div class="text-5xl mb-4 group-hover:scale-110 transition-transform">⚡</div><h4 class="text-xl font-bold text-gray-800 mb-3">Harry Potter</h4><p class="text-gray-600 text-sm leading-relaxed">Contigo no necesito tomar Felix Felicis porque ya siento que tengo toda la suerte del mundo.</p></div>
+      <div class="glass-card p-8 rounded-3xl border-t-4 border-t-red-500 hover:-translate-y-2 transition-all duration-300 group"><div class="text-5xl mb-4 group-hover:scale-110 transition-transform">🦸‍♂️</div><h4 class="text-xl font-bold text-gray-800 mb-3">Invencible</h4><p class="text-gray-600 text-sm leading-relaxed">Ni Omni-Man podría destruir el espacio que te ganaste en mí. Lo que me haces sentir es... <span class="font-black text-red-600 italic">Invencible</span>.</p></div>
+      <div class="glass-card p-8 rounded-3xl border-t-4 border-t-gray-400 hover:-translate-y-2 transition-all duration-300 group"><div class="text-5xl mb-4 group-hover:scale-110 transition-transform">🐺</div><h4 class="text-xl font-bold text-gray-800 mb-3">Juego de Tronos</h4><p class="text-gray-600 text-sm leading-relaxed">No te hicieron falta dragones para conquistar mi corazón. Prometo que nosotros sí vamos a tener un buen final.</p></div>
+      <div class="glass-card p-8 rounded-3xl border-t-4 border-t-slate-800 hover:-translate-y-2 transition-all duration-300 group"><div class="text-5xl mb-4 group-hover:scale-110 transition-transform">🐉</div><h4 class="text-xl font-bold text-gray-800 mb-3">Chimuelo</h4><p class="text-gray-600 text-sm leading-relaxed">Te juro que haría el baile de apareamiento más ridículo, así estilo Chimuelo, solo para verte reír.</p></div>
+      <div class="glass-card p-8 rounded-3xl border-t-4 border-t-blue-500 hover:-translate-y-2 transition-all duration-300 group"><div class="text-5xl mb-4 group-hover:scale-110 transition-transform">🌺</div><h4 class="text-xl font-bold text-gray-800 mb-3">Stitch</h4><p class="text-gray-600 text-sm leading-relaxed">Me encantas con todo y tu "nivel de maldad". Para mí ya eres familia y no te cambiaría por nada en esta galaxia.</p></div>
+      <div class="glass-card p-8 rounded-3xl border-t-4 border-t-teal-500 hover:-translate-y-2 transition-all duration-300 group"><div class="text-5xl mb-4 group-hover:scale-110 transition-transform">⚔️</div><h4 class="text-xl font-bold text-gray-800 mb-3">League of Legends</h4><p class="text-gray-600 text-sm leading-relaxed">Eres el mejor dúo que la vida me pudo emparejar. Tú ya carreaste mi corazón desde las 3 am.</p></div>
+      <div class="glass-card p-8 rounded-3xl border-t-4 border-t-fuchsia-500 hover:-translate-y-2 transition-all duration-300 group lg:col-start-2"><div class="text-5xl mb-4 group-hover:scale-110 transition-transform">🎲</div><h4 class="text-xl font-bold text-gray-800 mb-3">Teamfight Tactics</h4><p class="text-gray-600 text-sm leading-relaxed">Tenemos más sinergia que la compo más rota del parche. Si fueras ficha, serías mi legendaria al 3.</p></div>
+      <div onclick="hacerFlorecer()" class="cursor-pointer glass-card p-8 rounded-3xl border-t-4 border-t-pink-400 hover:-translate-y-2 hover:shadow-[0_15px_40px_rgba(251,113,133,.3)] transition-all duration-300 group lg:col-start-3 relative overflow-hidden"><div class="absolute inset-0 bg-pink-100 opacity-0 group-hover:opacity-20 transition-opacity"></div><div class="text-5xl mb-4 group-hover:scale-110 transition-transform">🌸</div><h4 class="text-xl font-bold text-gray-800 mb-3">La Nobleza de las Flores</h4><p class="text-gray-600 text-sm leading-relaxed z-10 relative">Tú eres mi Kaoruko. Siempre cruzaría cualquier distancia solo para ver florecer tu sonrisa. <span class="italic text-pink-400 text-xs block mt-2">(Tócame)</span></p></div>
+    </div>
+  </section>
+
+  <!-- ÁNIMO -->
+  <section class="w-full mt-32 reveal flex flex-col items-center">
+    <h3 class="title-font text-5xl text-rose-500 text-center mb-6">¿Cómo te sientes hoy?</h3>
+    <p class="text-gray-600 text-center mb-10 text-lg">Toca un emoji, tengo un mensaje para ti...</p>
+    <div class="glass-card p-10 rounded-[3rem] max-w-2xl w-full">
+      <div class="flex flex-wrap justify-center gap-4 mb-10">
+        <button onclick="mostrarMensajeAnimo('feliz')" class="glass-button w-14 h-14 md:w-16 md:h-16 flex items-center justify-center text-3xl md:text-4xl hover:scale-110 transition-all focus:outline-none rounded-full">🥰</button>
+        <button onclick="mostrarMensajeAnimo('triste')" class="glass-button w-14 h-14 md:w-16 md:h-16 flex items-center justify-center text-3xl md:text-4xl hover:scale-110 transition-all focus:outline-none rounded-full">🥺</button>
+        <button onclick="mostrarMensajeAnimo('cansada')" class="glass-button w-14 h-14 md:w-16 md:h-16 flex items-center justify-center text-3xl md:text-4xl hover:scale-110 transition-all focus:outline-none rounded-full">🥱</button>
+        <button onclick="mostrarMensajeAnimo('enojada')" class="glass-button w-14 h-14 md:w-16 md:h-16 flex items-center justify-center text-3xl md:text-4xl hover:scale-110 transition-all focus:outline-none rounded-full">😤</button>
+        <button onclick="mostrarMensajeAnimo('aburrida')" class="glass-button w-14 h-14 md:w-16 md:h-16 flex items-center justify-center text-3xl md:text-4xl hover:scale-110 transition-all focus:outline-none rounded-full">🙃</button>
+      </div>
+      <div id="caja-mensaje-animo" class="bg-white/50 p-8 rounded-2xl border border-white/60 min-h-[100px] flex items-center justify-center text-center shadow-inner">
+        <p id="texto-animo" class="text-gray-700 font-medium text-lg">Estoy esperando a que me digas cómo te sientes...</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- REFUGIO -->
+  <section class="w-full mt-32 reveal flex flex-col items-center">
+    <h3 class="title-font text-5xl text-rose-500 text-center mb-6">Tu Refugio Seguro ❤️‍🩹</h3>
+    <p class="text-gray-600 text-center mb-10 max-w-md text-lg">Si alguna vez te sientes mal y no sabes qué decir, escríbelo aquí.</p>
+    <div class="glass-card p-10 rounded-[3rem] max-w-2xl w-full">
+      <textarea id="texto-refugio" placeholder="Cuéntame qué pasa, Gemita..." class="w-full h-36 px-6 py-4 rounded-2xl border border-white/50 focus:outline-none focus:ring-2 focus:ring-rose-400 text-gray-700 bg-white/40 text-base shadow-inner resize-none mb-6 placeholder-gray-400 transition-all" style="background:var(--input-bg)"></textarea>
+      <button onclick="enviarRefugio()" class="w-full bg-gradient-to-r from-rose-400 to-pink-500 hover:from-rose-500 hover:to-pink-600 text-white font-semibold py-4 rounded-2xl transition-all shadow-[0_4px_15px_rgba(244,63,94,.4)] active:scale-95 flex items-center justify-center gap-2 text-lg">Necesito un abrazo digital ✨</button>
+      <div id="caja-respuesta-refugio" class="mt-8 bg-white/60 p-6 rounded-2xl border border-white/80 min-h-[80px] hidden items-center justify-center text-center shadow-sm">
+        <p id="texto-respuesta-refugio" class="text-gray-800 font-medium text-lg"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CANCIONES -->
+  <section class="w-full mt-32 reveal glass-card p-8 md:p-10 rounded-[3rem] text-center max-w-5xl">
+    <h3 class="title-font text-5xl text-rose-500 mb-6">Te Canto a Ti 🎤</h3>
+    <p class="text-gray-700 mb-12 max-w-2xl mx-auto">No soy un artista profesional, pero grabé estas canciones con mi propia voz y todo mi corazón.</p>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="bg-white/70 p-6 rounded-3xl shadow-lg border border-white hover:-translate-y-2 transition-transform" style="background:var(--card-bg)">
+        <div class="flex items-center gap-4 mb-4"><div class="w-14 h-14 bg-gradient-to-br from-rose-400 to-pink-500 rounded-2xl flex-shrink-0 flex items-center justify-center shadow-md"><svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V7.82l8-1.6v5.894A4.37 4.37 0 0015 12c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V3z"/></svg></div><div class="text-left flex-1 min-w-0"><h4 class="text-gray-800 font-bold text-lg truncate">Chachachá</h4><p class="text-rose-500 text-sm">Tu Lobito</p></div><button onclick="togglePlay(1)" class="w-11 h-11 bg-gray-900 hover:bg-rose-500 transition-colors rounded-full flex items-center justify-center focus:outline-none flex-shrink-0"><svg id="playIcon1" class="w-5 h-5 text-white ml-0.5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"/></svg><svg id="pauseIcon1" class="w-5 h-5 text-white hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z"/></svg></button></div>
+        <div class="flex items-center gap-2 w-full"><span id="currentTime1" class="text-xs text-gray-500 w-8 text-right">0:00</span><input type="range" id="progressBar1" class="flex-1 h-1.5 bg-gray-200 rounded-lg appearance-none accent-rose-500" value="0" min="0" max="100" oninput="seekAudio(1)"><span id="duration1" class="text-xs text-gray-500 w-8">0:00</span></div>
+        <audio id="miAudio1" src="chachacha.MP3" preload="metadata"></audio>
+        <div class="mt-4 p-4 bg-white/50 rounded-xl border border-white text-left" style="background:var(--input-bg)"><p class="italic text-gray-600 font-serif text-sm">"Dame de tu vida y de tu tiempo..."</p></div>
+      </div>
+      <div class="bg-white/70 p-6 rounded-3xl shadow-lg border border-white hover:-translate-y-2 transition-transform" style="background:var(--card-bg)">
+        <div class="flex items-center gap-4 mb-4"><div class="w-14 h-14 bg-gradient-to-br from-purple-400 to-indigo-500 rounded-2xl flex-shrink-0 flex items-center justify-center shadow-md"><svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V7.82l8-1.6v5.894A4.37 4.37 0 0015 12c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V3z"/></svg></div><div class="text-left flex-1 min-w-0"><h4 class="text-gray-800 font-bold text-lg truncate">Conexión</h4><p class="text-purple-500 text-sm">Tu Lobito</p></div><button onclick="togglePlay(2)" class="w-11 h-11 bg-gray-900 hover:bg-purple-500 transition-colors rounded-full flex items-center justify-center focus:outline-none flex-shrink-0"><svg id="playIcon2" class="w-5 h-5 text-white ml-0.5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"/></svg><svg id="pauseIcon2" class="w-5 h-5 text-white hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z"/></svg></button></div>
+        <div class="flex items-center gap-2 w-full"><span id="currentTime2" class="text-xs text-gray-500 w-8 text-right">0:00</span><input type="range" id="progressBar2" class="flex-1 h-1.5 bg-gray-200 rounded-lg appearance-none accent-purple-500" value="0" min="0" max="100" oninput="seekAudio(2)"><span id="duration2" class="text-xs text-gray-500 w-8">0:00</span></div>
+        <audio id="miAudio2" src="conexion.MP3" preload="metadata"></audio>
+        <div class="mt-4 p-4 bg-white/50 rounded-xl border border-white text-left" style="background:var(--input-bg)"><p class="italic text-gray-600 font-serif text-sm">"No sabíamos que esto era algo más que química..."</p></div>
+      </div>
+      <div class="bg-white/70 p-6 rounded-3xl shadow-lg border border-white hover:-translate-y-2 transition-transform" style="background:var(--card-bg)">
+        <div class="flex items-center gap-4 mb-4"><div class="w-14 h-14 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-2xl flex-shrink-0 flex items-center justify-center shadow-md"><svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V7.82l8-1.6v5.894A4.37 4.37 0 0015 12c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V3z"/></svg></div><div class="text-left flex-1 min-w-0"><h4 class="text-gray-800 font-bold text-lg truncate">Bajo El Agua</h4><p class="text-cyan-500 text-sm">Tu Lobito</p></div><button onclick="togglePlay(3)" class="w-11 h-11 bg-gray-900 hover:bg-cyan-500 transition-colors rounded-full flex items-center justify-center focus:outline-none flex-shrink-0"><svg id="playIcon3" class="w-5 h-5 text-white ml-0.5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"/></svg><svg id="pauseIcon3" class="w-5 h-5 text-white hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z"/></svg></button></div>
+        <div class="flex items-center gap-2 w-full"><span id="currentTime3" class="text-xs text-gray-500 w-8 text-right">0:00</span><input type="range" id="progressBar3" class="flex-1 h-1.5 bg-gray-200 rounded-lg appearance-none accent-cyan-500" value="0" min="0" max="100" oninput="seekAudio(3)"><span id="duration3" class="text-xs text-gray-500 w-8">0:00</span></div>
+        <audio id="miAudio3" src="agua.MP3" preload="metadata"></audio>
+        <div class="mt-4 p-4 bg-white/50 rounded-xl border border-white text-left" style="background:var(--input-bg)"><p class="italic text-gray-600 font-serif text-sm">"Quiero volar contigo, muy alto, en algún lugar..."</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- POEMA -->
+  <section class="w-full mt-32 reveal flex flex-col items-center px-4">
+    <div class="glass-card max-w-3xl w-full p-10 md:p-16 rounded-[3rem] relative overflow-hidden text-center">
+      <svg class="absolute -bottom-10 -right-10 w-80 h-80 text-rose-200 opacity-30 -rotate-12 pointer-events-none" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+      <div class="relative z-10">
+        <h4 onclick="triggerEaster('poema')" class="easter-secret title-font text-5xl md:text-6xl text-gradient mb-10 flex justify-center items-center gap-4 cursor-pointer select-none">Gemita <span class="text-4xl">✨</span></h4>
+        <div class="font-serif text-lg md:text-2xl text-gray-800 italic leading-[2] text-center">
+          <p class="mb-8">Me pierdo en la calma de tus ojos café,<br>en ellos encuentro la paz que busqué.<br>Me encanta tu pelo, tu dulce nariz,<br>y esa sonrisa que me hace feliz.<br>Eres mezcla de todo, un mundo ideal,<br>con esa alegría que no tiene igual.<br>A tu lado el tiempo parece volar,<br>y escucharte reír es un sueño, sin más.<br>Aún guardo el recuerdo de aquella ocasión,<br>las tres y media marcaba el reloj jugando lol.</p>
+          <p>Entre el juego, las voces y cada partida,<br>te fuiste ganando un lugar en mi vida y corazón.<br>Hoy solo sé que me llenas de amor,<br>que eres mi refugio y mi luz de color.<br>Contigo mi mundo se vuelve mejor,<br>ganando cada día la liga de mi corazón.</p>
         </div>
-    </div>
-
-    <!-- ═══════════════════════════════════════ -->
-    <!-- PANTALLA 2: CONTENIDO PRINCIPAL -->
-    <!-- ═══════════════════════════════════════ -->
-    <div id="main-content" class="hidden w-full max-w-5xl px-4 py-16 flex-col items-center relative">
-        
-        <!-- ENCABEZADO -->
-        <header class="text-center mb-16 fade-in w-full" style="animation-delay: 0.3s;">
-            <p class="text-rose-400 uppercase tracking-[0.4em] text-sm font-semibold mb-4">Hoy es tu día especial</p>
-            <h1 class="title-font text-7xl md:text-9xl text-gradient mb-3 filter drop-shadow-sm leading-none">¡Feliz</h1>
-            <h1 class="title-font text-7xl md:text-9xl text-gradient filter drop-shadow-sm leading-none">Cumpleaños!</h1>
-            <h2 class="text-3xl md:text-4xl text-rose-400 font-light mt-6 tracking-[0.2em]">Gemita 🌸</h2> 
-        </header>
-
-        <!-- CARTA -->
-        <section class="glass-card p-10 md:p-14 rounded-[2.5rem] mb-24 fade-in w-full max-w-3xl mx-auto" style="animation-delay: 0.7s;">
-            <div class="flex justify-center mb-8">
-                <div class="bg-gradient-to-br from-rose-100 to-pink-100 p-5 rounded-full shadow-inner">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-rose-500" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" />
-                    </svg>
-                </div>
-            </div>
-            <div class="space-y-6 text-lg md:text-xl text-gray-700 leading-relaxed text-center">
-                <p>Quería hacer algo diferente para ti en este día tan especial. Eres una persona increíble, llena de luz, y cada momento contigo ha sido mágico.</p>
-                <p>Espero que este nuevo año de vida te traiga muchísimas sonrisas, éxitos y momentos inolvidables. Gracias por existir y por todo lo que compartimos.</p>
-                <p class="title-font text-4xl md:text-5xl text-gradient mt-10 italic block">¡Que todos tus deseos se cumplan!</p>
-            </div>
-        </section>
-
-        <!-- GALERÍA -->
-        <section class="w-full fade-in" style="animation-delay: 1.1s;">
-            <h3 class="title-font text-5xl text-rose-500 text-center mb-12 italic">Nuestros Momentos</h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 px-4">
-                
-                <div class="polaroid cursor-pointer" data-tilt data-tilt-scale="1.04" data-tilt-glare data-tilt-max-glare="0.25" onclick="abrirLightbox('Aquel día especial', document.getElementById('img1').src)">
-                    <div class="w-full h-72 bg-gradient-to-br from-rose-100 to-pink-100 rounded flex items-center justify-center overflow-hidden">
-                        <img id="img1" src="foto1.jpg" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=400&q=80'" alt="Aquel día especial" class="w-full h-full object-cover">
-                    </div>
-                    <p class="text-center mt-5 title-font text-2xl text-gray-700 italic">Aquel día especial</p>
-                </div>
-
-                <div class="polaroid cursor-pointer" data-tilt data-tilt-scale="1.04" data-tilt-glare data-tilt-max-glare="0.25" onclick="abrirLightbox('Esa sonrisa única', document.getElementById('img2').src)">
-                    <div class="w-full h-72 bg-gradient-to-br from-purple-100 to-pink-100 rounded flex items-center justify-center overflow-hidden">
-                        <img id="img2" src="foto2.jpg" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80'" alt="Esa sonrisa única" class="w-full h-full object-cover">
-                    </div>
-                    <p class="text-center mt-5 title-font text-2xl text-gray-700 italic">Esa sonrisa única</p>
-                </div>
-
-                <div class="polaroid cursor-pointer" data-tilt data-tilt-scale="1.04" data-tilt-glare data-tilt-max-glare="0.25" onclick="abrirLightbox('Lo mejor está por venir', document.getElementById('img3').src)">
-                    <div class="w-full h-72 bg-gradient-to-br from-orange-100 to-rose-100 rounded flex items-center justify-center overflow-hidden">
-                        <img id="img3" src="foto3.jpg" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=400&q=80'" alt="Lo mejor está por venir" class="w-full h-full object-cover">
-                    </div>
-                    <p class="text-center mt-5 title-font text-2xl text-gray-700 italic">Lo mejor está por venir</p>
-                </div>
-
-            </div>
-            <p class="text-center text-sm text-gray-400 mt-8 font-light tracking-wide">Toca una foto para moverla o ampliarla ✨</p>
-        </section>
-
-        <!-- NUESTRO TIEMPO -->
-        <section class="w-full mt-32 reveal flex flex-col items-center px-4">
-            <h3 class="title-font text-5xl text-rose-500 text-center mb-4 italic">Nuestro Tiempo</h3>
-            <p class="text-gray-500 text-center mb-10 max-w-lg text-lg">Desde aquella ocasión en que las 3:30 marcaban el reloj...</p>
-            
-            <div class="flex flex-wrap justify-center gap-4 md:gap-6 text-center">
-                <div class="glass-card p-6 rounded-[2rem] min-w-[100px] md:min-w-[130px] hover:-translate-y-3 transition-all duration-300 hover:shadow-[0_15px_35px_rgba(244,63,94,0.15)]">
-                    <span id="t-dias" class="text-5xl md:text-6xl font-bold text-gradient tabular-nums">0</span>
-                    <p class="text-xs uppercase tracking-widest text-gray-400 mt-2 font-semibold">Días</p>
-                </div>
-                <div class="glass-card p-6 rounded-[2rem] min-w-[100px] md:min-w-[130px] hover:-translate-y-3 transition-all duration-300 hover:shadow-[0_15px_35px_rgba(244,63,94,0.15)]">
-                    <span id="t-horas" class="text-5xl md:text-6xl font-bold text-gradient tabular-nums">0</span>
-                    <p class="text-xs uppercase tracking-widest text-gray-400 mt-2 font-semibold">Horas</p>
-                </div>
-                <div class="glass-card p-6 rounded-[2rem] min-w-[100px] md:min-w-[130px] hover:-translate-y-3 transition-all duration-300 hover:shadow-[0_15px_35px_rgba(244,63,94,0.15)]">
-                    <span id="t-minutos" class="text-5xl md:text-6xl font-bold text-gradient tabular-nums">0</span>
-                    <p class="text-xs uppercase tracking-widest text-gray-400 mt-2 font-semibold">Min</p>
-                </div>
-                <div class="glass-card p-6 rounded-[2rem] min-w-[100px] md:min-w-[130px] hover:-translate-y-3 transition-all duration-300 hover:shadow-[0_15px_35px_rgba(244,63,94,0.15)]">
-                    <span id="t-segundos" class="text-5xl md:text-6xl font-bold text-gradient tabular-nums animate-pulse">0</span>
-                    <p class="text-xs uppercase tracking-widest text-gray-400 mt-2 font-semibold">Seg</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- COSAS QUE ME ENCANTAN -->
-        <section class="w-full mt-32 reveal">
-            <h3 class="title-font text-5xl text-rose-500 text-center mb-12 italic">Cosas que me encantan de ti</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 px-4">
-                <div class="glass-card p-8 rounded-3xl text-center hover:-translate-y-4 hover:shadow-[0_20px_40px_rgba(244,63,94,0.15)] transition-all duration-400 group">
-                    <div class="text-5xl mb-5 group-hover:scale-125 transition-transform duration-300">✨</div>
-                    <h4 class="text-xl font-bold text-rose-500 mb-3">Tu Sonrisa</h4>
-                    <p class="text-gray-500 text-sm leading-relaxed">Ilumina cualquier lugar al que llegas, y sobre todo mi día.</p>
-                </div>
-                <div class="glass-card p-8 rounded-3xl text-center hover:-translate-y-4 hover:shadow-[0_20px_40px_rgba(168,85,247,0.15)] transition-all duration-400 group">
-                    <div class="text-5xl mb-5 group-hover:scale-125 transition-transform duration-300">🧠</div>
-                    <h4 class="text-xl font-bold text-rose-500 mb-3">Tu Inteligencia</h4>
-                    <p class="text-gray-500 text-sm leading-relaxed">Me encanta escucharte hablar de lo que te apasiona y aprender de ti.</p>
-                </div>
-                <div class="glass-card p-8 rounded-3xl text-center hover:-translate-y-4 hover:shadow-[0_20px_40px_rgba(251,191,36,0.15)] transition-all duration-400 group">
-                    <div class="text-5xl mb-5 group-hover:scale-125 transition-transform duration-300">😂</div>
-                    <h4 class="text-xl font-bold text-rose-500 mb-3">Tu Humor</h4>
-                    <p class="text-gray-500 text-sm leading-relaxed">Nadie me hace reír tanto como tú, incluso en los peores momentos.</p>
-                </div>
-                <div class="glass-card p-8 rounded-3xl text-center hover:-translate-y-4 hover:shadow-[0_20px_40px_rgba(244,63,94,0.15)] transition-all duration-400 group">
-                    <div class="text-5xl mb-5 group-hover:scale-125 transition-transform duration-300">❤️</div>
-                    <h4 class="text-xl font-bold text-rose-500 mb-3">Tu Corazón</h4>
-                    <p class="text-gray-500 text-sm leading-relaxed">Eres la persona más amable, tierna y especial que conozco.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- ✨ NUEVO: 100 RAZONES CON IA -->
-        <section class="w-full mt-32 reveal flex flex-col items-center px-4">
-            <h3 class="title-font text-5xl text-rose-500 text-center mb-2 italic">Un millón de razones...</h3>
-            <p class="text-gray-500 text-center mb-10 text-lg">Toca la carta — tengo algo especial preparado para ti.</p>
-            
-            <button onclick="mostrarRazonIA()" aria-label="Mostrar razón" class="group glass-button p-10 rounded-[3rem] hover:bg-white/90 transition-all duration-300 hover:-translate-y-3 focus:outline-none shadow-xl hover:shadow-[0_25px_50px_rgba(244,63,94,0.2)]">
-                <div class="text-7xl group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300">💌</div>
-            </button>
-            
-            <div id="caja-razon" class="mt-10 glass-card p-8 rounded-3xl border-l-4 border-l-rose-400 w-full max-w-xl min-h-[120px] items-center justify-center hidden">
-                <div id="loading-razon" class="loading-dots hidden justify-center w-full">
-                    <span></span><span></span><span></span>
-                </div>
-                <p id="texto-razon" class="text-gray-800 text-xl font-serif italic text-center leading-relaxed w-full"></p>
-            </div>
-        </section>
-
-        <!-- MULTIVERSO -->
-        <section class="w-full mt-32 reveal">
-            <h3 class="title-font text-5xl text-rose-500 text-center mb-4 italic">En nuestro propio universo...</h3>
-            <p class="text-gray-500 text-center mb-6 max-w-2xl mx-auto px-4 text-lg">Porque conectamos en más de un mundo, y te aseguro que en todos te volvería a elegir.</p>
-            
-            <div class="flex justify-center mb-10">
-                <button onclick="hacerFlorecer()" class="glass-button px-6 py-3 rounded-full text-rose-500 font-bold hover:bg-rose-50 hover:shadow-lg transition-all flex items-center gap-3 group focus:outline-none active:scale-95">
-                    <span class="text-2xl group-hover:rotate-180 transition-transform duration-700">🌸</span>
-                    Haz florecer la pantalla
-                </button>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4 max-w-6xl mx-auto">
-                <div class="universe-card glass-card glow-yellow p-8 rounded-3xl border-t-4 border-t-yellow-400 group">
-                    <div class="text-5xl mb-4 group-hover:scale-110 transition-transform duration-300">⚡</div>
-                    <h4 class="text-xl font-bold text-gray-800 mb-3">Harry Potter</h4>
-                    <p class="text-gray-500 text-sm leading-relaxed">Contigo no necesito tomar Felix Felicis porque ya siento que tengo toda la suerte del mundo.</p>
-                </div>
-                <div class="universe-card glass-card glow-red p-8 rounded-3xl border-t-4 border-t-red-500 group">
-                    <div class="text-5xl mb-4 group-hover:scale-110 transition-transform duration-300">🦸‍♂️</div>
-                    <h4 class="text-xl font-bold text-gray-800 mb-3">Invencible</h4>
-                    <p class="text-gray-500 text-sm leading-relaxed">Ni Omni-Man podría destruir el espacio que ya te ganaste en mí. Lo que me haces sentir de verdad es... <span class="font-black text-red-600 italic">Invencible</span>.</p>
-                </div>
-                <div class="universe-card glass-card glow-gray p-8 rounded-3xl border-t-4 border-t-gray-400 group">
-                    <div class="text-5xl mb-4 group-hover:scale-110 transition-transform duration-300">🐺</div>
-                    <h4 class="text-xl font-bold text-gray-800 mb-3">Juego de Tronos</h4>
-                    <p class="text-gray-500 text-sm leading-relaxed">No te hicieron falta dragones para conquistar mi corazón. Prometo que nosotros sí vamos a tener un buen final.</p>
-                </div>
-                <div class="universe-card glass-card glow-slate p-8 rounded-3xl border-t-4 border-t-slate-700 group">
-                    <div class="text-5xl mb-4 group-hover:scale-110 transition-transform duration-300">🐉</div>
-                    <h4 class="text-xl font-bold text-gray-800 mb-3">Chimuelo</h4>
-                    <p class="text-gray-500 text-sm leading-relaxed">Te juro que haría el baile de apareamiento más raro y ridículo, así estilo Chimuelo, nada más para verte reír.</p>
-                </div>
-                <div class="universe-card glass-card glow-blue p-8 rounded-3xl border-t-4 border-t-blue-500 group">
-                    <div class="text-5xl mb-4 group-hover:scale-110 transition-transform duration-300">🌺</div>
-                    <h4 class="text-xl font-bold text-gray-800 mb-3">Stitch</h4>
-                    <p class="text-gray-500 text-sm leading-relaxed">Me encantas con todo y tu "nivel de maldad". Para mí ya eres familia, y no te cambiaría por nada en esta galaxia.</p>
-                </div>
-                <div class="universe-card glass-card glow-teal p-8 rounded-3xl border-t-4 border-t-teal-500 group">
-                    <div class="text-5xl mb-4 group-hover:scale-110 transition-transform duration-300">⚔️</div>
-                    <h4 class="text-xl font-bold text-gray-800 mb-3">League of Legends</h4>
-                    <p class="text-gray-500 text-sm leading-relaxed">Eres el mejor dúo que la vida me pudo emparejar. Tú ya carreaste mi corazón desde las 3 am.</p>
-                </div>
-                <div class="universe-card glass-card glow-fuchsia p-8 rounded-3xl border-t-4 border-t-fuchsia-500 group lg:col-start-2">
-                    <div class="text-5xl mb-4 group-hover:scale-110 transition-transform duration-300">🎲</div>
-                    <h4 class="text-xl font-bold text-gray-800 mb-3">Teamfight Tactics</h4>
-                    <p class="text-gray-500 text-sm leading-relaxed">Tenemos más sinergia que la compo más rota del parche. Si fueras ficha, serías mi legendaria al 3.</p>
-                </div>
-                <div onclick="hacerFlorecer()" class="universe-card cursor-pointer glass-card glow-pink p-8 rounded-3xl border-t-4 border-t-pink-400 group lg:col-start-3 relative overflow-hidden">
-                    <div class="absolute inset-0 bg-gradient-to-br from-pink-50 to-rose-50 opacity-0 group-hover:opacity-60 transition-opacity"></div>
-                    <div class="text-5xl mb-4 group-hover:scale-110 transition-transform duration-300 relative z-10">🌸</div>
-                    <h4 class="text-xl font-bold text-gray-800 mb-3 relative z-10">La Nobleza de las Flores</h4>
-                    <p class="text-gray-500 text-sm leading-relaxed relative z-10">Tú eres mi Kaoruko. Siempre cruzaría cualquier distancia solo para ver florecer tu sonrisa. <span class="italic text-pink-400 text-xs block mt-2">(Tócame 🌸)</span></p>
-                </div>
-            </div>
-        </section>
-        
-        <!-- ESTADOS DE ÁNIMO -->
-        <section class="w-full mt-32 reveal flex flex-col items-center">
-            <h3 class="title-font text-5xl text-rose-500 text-center mb-4 italic">¿Cómo te sientes hoy?</h3>
-            <p class="text-gray-500 text-center mb-10 text-lg">Toca un emoji, tengo un mensaje para ti... 💬</p>
-            
-            <div class="glass-card p-10 rounded-[3rem] max-w-2xl w-full">
-                <div class="flex flex-wrap justify-center gap-5 mb-10">
-                    <button aria-label="Feliz" onclick="mostrarMensajeAnimo('feliz', this)" class="animo-btn glass-button w-16 h-16 flex items-center justify-center text-4xl rounded-full" title="¡Feliz!">🥰</button>
-                    <button aria-label="Triste" onclick="mostrarMensajeAnimo('triste', this)" class="animo-btn glass-button w-16 h-16 flex items-center justify-center text-4xl rounded-full" title="Un poco triste">🥺</button>
-                    <button aria-label="Cansada" onclick="mostrarMensajeAnimo('cansada', this)" class="animo-btn glass-button w-16 h-16 flex items-center justify-center text-4xl rounded-full" title="Cansada">🥱</button>
-                    <button aria-label="Enojada" onclick="mostrarMensajeAnimo('enojada', this)" class="animo-btn glass-button w-16 h-16 flex items-center justify-center text-4xl rounded-full" title="Enojada">😤</button>
-                    <button aria-label="Aburrida" onclick="mostrarMensajeAnimo('aburrida', this)" class="animo-btn glass-button w-16 h-16 flex items-center justify-center text-4xl rounded-full" title="Aburrida">🙃</button>
-                </div>
-
-                <div id="caja-mensaje-animo" class="bg-white/60 p-8 rounded-2xl border border-white/80 min-h-[100px] flex items-center justify-center text-center shadow-inner transition-all duration-500">
-                    <p id="texto-animo" class="text-gray-600 font-medium text-lg transition-opacity duration-300">
-                        Estoy esperando a que me digas cómo te sientes... 💕
-                    </p>
-                </div>
-            </div>
-        </section>
-
-        <!-- ✨ NUEVO: REFUGIO SEGURO CON IA REAL -->
-        <section class="w-full mt-32 reveal flex flex-col items-center">
-            <h3 class="title-font text-5xl text-rose-500 text-center mb-4 italic">Tu Refugio Seguro ❤️‍🩹</h3>
-            <p class="text-gray-500 text-center mb-10 max-w-md text-lg">Si alguna vez te sientes mal y no sabes qué decir, escríbelo aquí. Estaré de verdad para escucharte.</p>
-            
-            <div class="glass-card p-10 rounded-[3rem] max-w-2xl w-full">
-
-                <div class="mb-4 flex items-center gap-2 text-xs text-rose-400 font-semibold uppercase tracking-wider">
-                    <div class="w-2 h-2 bg-rose-400 rounded-full animate-pulse"></div>
-                    Lobito está aquí para ti — respuesta personalizada con IA ✨
-                </div>
-
-                <textarea id="texto-refugio" placeholder="Cuéntame qué pasa, Gemita... estoy escuchando 💕" 
-                    class="w-full h-36 px-6 py-4 rounded-2xl border border-white/50 focus:outline-none text-gray-700 bg-white/50 transition-all duration-300 text-base shadow-inner resize-none mb-6 placeholder-gray-400 font-medium"
-                ></textarea>
-                
-                <button onclick="enviarRefugioIA()" id="btn-refugio" class="w-full bg-gradient-to-r from-rose-400 to-pink-500 hover:from-rose-500 hover:to-pink-600 text-white font-bold py-4 px-6 rounded-2xl transition-all shadow-[0_6px_20px_rgba(244,63,94,0.35)] active:scale-95 flex items-center justify-center gap-2 text-lg">
-                    <span id="btn-refugio-texto">Necesito un abrazo digital ✨</span>
-                </button>
-
-                <div id="caja-respuesta-refugio" class="mt-8 hidden">
-                    <div id="loading-refugio" class="loading-dots justify-center hidden mb-2">
-                        <span></span><span></span><span></span>
-                    </div>
-                    <div class="bg-gradient-to-br from-rose-50 to-pink-50 p-6 rounded-2xl border border-rose-100 shadow-sm">
-                        <div class="flex items-center gap-3 mb-4">
-                            <div class="w-9 h-9 bg-gradient-to-br from-rose-400 to-pink-500 rounded-full flex items-center justify-center text-white text-base shadow-md">🐺</div>
-                            <div>
-                                <p class="font-bold text-gray-800 text-sm">Lobito</p>
-                                <p class="text-gray-400 text-xs">Solo para ti ❤️</p>
-                            </div>
-                        </div>
-                        <p id="texto-respuesta-refugio" class="text-gray-700 font-medium text-base leading-relaxed"></p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- CANCIONES -->
-        <section class="w-full mt-32 reveal glass-card p-10 rounded-[3rem] text-center max-w-5xl">
-            <h3 class="title-font text-5xl text-rose-500 mb-4 italic">Te Canto a Ti 🎤</h3>
-            <p class="text-gray-500 mb-12 max-w-2xl mx-auto text-lg">No soy artista profesional, pero grabé estas canciones con mi propia voz y todo mi corazón.</p>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Reproductor 1 -->
-                <div class="bg-white/80 p-6 rounded-3xl shadow-md border border-white/80 hover:-translate-y-2 transition-all duration-300 hover:shadow-[0_15px_35px_rgba(244,63,94,0.15)]">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-14 h-14 bg-gradient-to-br from-rose-400 to-pink-500 rounded-2xl flex-shrink-0 flex items-center justify-center shadow-md">
-                            <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V7.82l8-1.6v5.894A4.37 4.37 0 0015 12c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V3z"></path></svg>
-                        </div>
-                        <div class="text-left flex-1 min-w-0">
-                            <h4 class="text-gray-800 font-bold text-lg truncate">Chachachá</h4>
-                            <p class="text-rose-400 font-semibold text-sm">Tu Lobito 🐺</p>
-                        </div>
-                        <button aria-label="Reproducir Chachachá" onclick="togglePlay(1)" class="w-11 h-11 bg-gray-900 hover:bg-rose-500 transition-colors rounded-full flex items-center justify-center shadow-lg focus:outline-none">
-                            <svg id="playIcon1" class="w-5 h-5 text-white ml-0.5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"></path></svg>
-                            <svg id="pauseIcon1" class="w-5 h-5 text-white hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z"></path></svg>
-                        </button>
-                    </div>
-                    <div class="flex items-center gap-3 w-full mb-4">
-                        <span id="currentTime1" class="text-xs font-medium text-gray-400 w-8 text-right tabular-nums">0:00</span>
-                        <input type="range" id="progressBar1" class="flex-1 h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-rose-500" value="0" min="0" max="100" onchange="seekAudio(1)" oninput="seekAudio(1)">
-                        <span id="duration1" class="text-xs font-medium text-gray-400 w-8 text-left tabular-nums">0:00</span>
-                    </div>
-                    <audio id="miAudio1" src="chachacha.MP3" preload="metadata"></audio>
-                    <div class="p-4 bg-rose-50/60 rounded-xl border border-rose-100 text-left">
-                        <p class="italic text-gray-500 font-serif text-sm leading-relaxed">"Dame de tu vida y de tu tiempo, suficientes para ver, dentro de tus ojos el momento..."</p>
-                    </div>
-                </div>
-
-                <!-- Reproductor 2 -->
-                <div class="bg-white/80 p-6 rounded-3xl shadow-md border border-white/80 hover:-translate-y-2 transition-all duration-300 hover:shadow-[0_15px_35px_rgba(168,85,247,0.15)]">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-14 h-14 bg-gradient-to-br from-purple-400 to-indigo-500 rounded-2xl flex-shrink-0 flex items-center justify-center shadow-md">
-                            <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V7.82l8-1.6v5.894A4.37 4.37 0 0015 12c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V3z"></path></svg>
-                        </div>
-                        <div class="text-left flex-1 min-w-0">
-                            <h4 class="text-gray-800 font-bold text-lg truncate">Conexión</h4>
-                            <p class="text-purple-400 font-semibold text-sm">Tu Lobito 🐺</p>
-                        </div>
-                        <button aria-label="Reproducir Conexión" onclick="togglePlay(2)" class="w-11 h-11 bg-gray-900 hover:bg-purple-500 transition-colors rounded-full flex items-center justify-center shadow-lg focus:outline-none">
-                            <svg id="playIcon2" class="w-5 h-5 text-white ml-0.5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"></path></svg>
-                            <svg id="pauseIcon2" class="w-5 h-5 text-white hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z"></path></svg>
-                        </button>
-                    </div>
-                    <div class="flex items-center gap-3 w-full mb-4">
-                        <span id="currentTime2" class="text-xs font-medium text-gray-400 w-8 text-right tabular-nums">0:00</span>
-                        <input type="range" id="progressBar2" class="flex-1 h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-purple-500" value="0" min="0" max="100" onchange="seekAudio(2)" oninput="seekAudio(2)">
-                        <span id="duration2" class="text-xs font-medium text-gray-400 w-8 text-left tabular-nums">0:00</span>
-                    </div>
-                    <audio id="miAudio2" src="conexion.MP3" preload="metadata"></audio>
-                    <div class="p-4 bg-purple-50/60 rounded-xl border border-purple-100 text-left">
-                        <p class="italic text-gray-500 font-serif text-sm leading-relaxed">"No sabíamos que esto era algo más que química... Cómo me encanta cuando me dices: 'Gracias por existir'."</p>
-                    </div>
-                </div>
-
-                <!-- Reproductor 3 -->
-                <div class="bg-white/80 p-6 rounded-3xl shadow-md border border-white/80 hover:-translate-y-2 transition-all duration-300 hover:shadow-[0_15px_35px_rgba(6,182,212,0.15)]">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-14 h-14 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-2xl flex-shrink-0 flex items-center justify-center shadow-md">
-                            <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V7.82l8-1.6v5.894A4.37 4.37 0 0015 12c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V3z"></path></svg>
-                        </div>
-                        <div class="text-left flex-1 min-w-0">
-                            <h4 class="text-gray-800 font-bold text-lg truncate">Bajo El Agua</h4>
-                            <p class="text-cyan-400 font-semibold text-sm">Tu Lobito 🐺</p>
-                        </div>
-                        <button aria-label="Reproducir Bajo El Agua" onclick="togglePlay(3)" class="w-11 h-11 bg-gray-900 hover:bg-cyan-500 transition-colors rounded-full flex items-center justify-center shadow-lg focus:outline-none">
-                            <svg id="playIcon3" class="w-5 h-5 text-white ml-0.5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"></path></svg>
-                            <svg id="pauseIcon3" class="w-5 h-5 text-white hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z"></path></svg>
-                        </button>
-                    </div>
-                    <div class="flex items-center gap-3 w-full mb-4">
-                        <span id="currentTime3" class="text-xs font-medium text-gray-400 w-8 text-right tabular-nums">0:00</span>
-                        <input type="range" id="progressBar3" class="flex-1 h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-cyan-500" value="0" min="0" max="100" onchange="seekAudio(3)" oninput="seekAudio(3)">
-                        <span id="duration3" class="text-xs font-medium text-gray-400 w-8 text-left tabular-nums">0:00</span>
-                    </div>
-                    <audio id="miAudio3" src="agua.MP3" preload="metadata"></audio>
-                    <div class="p-4 bg-cyan-50/60 rounded-xl border border-cyan-100 text-left">
-                        <p class="italic text-gray-500 font-serif text-sm leading-relaxed">"Quiero volar contigo, muy alto, en algún lugar. Quisiera estar contigo, viendo las estrellas..."</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- POEMA -->
-        <section class="w-full mt-32 reveal flex flex-col items-center px-4">
-            <div class="glass-card max-w-3xl w-full p-10 md:p-16 rounded-[3rem] relative overflow-hidden text-center">
-                <svg class="absolute -bottom-12 -right-12 w-80 h-80 text-rose-200 opacity-25 transform -rotate-12 pointer-events-none" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                
-                <div class="relative z-10">
-                    <h4 class="title-font text-5xl md:text-6xl text-gradient mb-10 italic flex justify-center items-center gap-4">Gemita <span class="text-4xl drop-shadow">✨</span></h4>
-                    <div class="font-serif text-lg md:text-xl text-gray-700 italic leading-[2.2] text-center">
-                        <p class="mb-8">
-                            Me pierdo en la calma de tus ojos café,<br>
-                            en ellos encuentro la paz que busqué.<br>
-                            Me encanta tu pelo, tu dulce nariz,<br>
-                            y esa sonrisa que me hace feliz.<br>
-                            Eres mezcla de todo, un mundo ideal,<br>
-                            con esa alegría que no tiene igual.<br>
-                            A tu lado el tiempo parece volar,<br>
-                            y escucharte reír es un sueño, sin más.<br>
-                            Aún guardo el recuerdo de aquella ocasión,<br>
-                            las tres y media marcaba el reloj jugando lol.
-                        </p>
-                        <p>
-                            Entre el juego, las voces y cada partida,<br>
-                            te fuiste ganando un lugar en mi vida y corazón.<br>
-                            Hoy solo sé que me llenas de amor,<br>
-                            que eres mi refugio y mi luz de color.<br>
-                            Contigo mi mundo se vuelve mejor,<br>
-                            ganando cada día la liga de mi corazón.
-                        </p>
-                    </div>
-                    <div class="mt-16 text-center">
-                        <p class="title-font text-4xl md:text-5xl text-rose-500 leading-tight italic">Con mucho amor,<br><span class="text-gradient">Lobito 🐺</span></p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- TALONARIO DE VALES -->
-        <section class="w-full mt-32 reveal flex flex-col items-center">
-            <h3 class="title-font text-5xl text-rose-500 mb-4 text-center italic">Unos regalitos extra...</h3>
-            <p class="text-gray-500 mb-12 text-center text-lg">4 vales especiales para ti. Raspa para descubrirlos. 🎁</p>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl w-full px-4">
-                <div class="relative w-full rounded-3xl shadow-md overflow-hidden hover:scale-[1.02] transition-transform duration-300 group">
-                    <div class="coupon-content coupon-rose w-full h-full p-8 text-center flex flex-col justify-center min-h-[220px]">
-                        <div class="text-4xl mb-3 group-hover:animate-bounce">🌙</div>
-                        <p class="text-rose-400 font-bold tracking-widest uppercase mb-2 text-xs">Vale por</p>
-                        <h4 class="text-2xl font-bold text-gray-800 mb-3">Una Noche de Desvelo</h4>
-                        <p class="text-gray-500 text-sm">Para platicar de todo y de nada hasta que veamos salir el sol juntos.</p>
-                    </div>
-                    <canvas class="scratch-canvas absolute top-0 left-0 w-full h-full z-10 rounded-3xl touch-none"></canvas>
-                </div>
-
-                <div class="relative w-full rounded-3xl shadow-md overflow-hidden hover:scale-[1.02] transition-transform duration-300 group">
-                    <div class="coupon-content coupon-purple w-full h-full p-8 text-center flex flex-col justify-center min-h-[220px]">
-                        <div class="text-4xl mb-3 group-hover:animate-bounce">🎮</div>
-                        <p class="text-purple-400 font-bold tracking-widest uppercase mb-2 text-xs">Vale por</p>
-                        <h4 class="text-2xl font-bold text-gray-800 mb-3">Un Dúo sin Tilteos</h4>
-                        <p class="text-gray-500 text-sm">Prometo que hoy jugaremos solo por diversión, sin importar cuántos LP perdamos.</p>
-                    </div>
-                    <canvas class="scratch-canvas absolute top-0 left-0 w-full h-full z-10 rounded-3xl touch-none"></canvas>
-                </div>
-
-                <div class="relative w-full rounded-3xl shadow-md overflow-hidden hover:scale-[1.02] transition-transform duration-300 group">
-                    <div class="coupon-content coupon-blue w-full h-full p-8 text-center flex flex-col justify-center min-h-[220px]">
-                        <div class="text-4xl mb-3 group-hover:animate-bounce">🫂</div>
-                        <p class="text-blue-400 font-bold tracking-widest uppercase mb-2 text-xs">Vale por</p>
-                        <h4 class="text-2xl font-bold text-gray-800 mb-3">Un Abrazo Apachurrador</h4>
-                        <p class="text-gray-500 text-sm">Canjeable en el instante exacto en que necesites sentirme cerquita de ti.</p>
-                    </div>
-                    <canvas class="scratch-canvas absolute top-0 left-0 w-full h-full z-10 rounded-3xl touch-none"></canvas>
-                </div>
-
-                <div class="relative w-full rounded-3xl shadow-md overflow-hidden hover:scale-[1.02] transition-transform duration-300 group">
-                    <div class="coupon-content coupon-emerald w-full h-full p-8 text-center flex flex-col justify-center min-h-[220px]">
-                        <div class="text-4xl mb-3 group-hover:animate-bounce">👑</div>
-                        <p class="text-emerald-500 font-bold tracking-widest uppercase mb-2 text-xs">Vale por</p>
-                        <h4 class="text-2xl font-bold text-gray-800 mb-3">Un Capricho Tuyo</h4>
-                        <p class="text-gray-500 text-sm">Tú mandas, tú eliges el plan de hoy y yo te sigo a cualquier locura.</p>
-                    </div>
-                    <canvas class="scratch-canvas absolute top-0 left-0 w-full h-full z-10 rounded-3xl touch-none"></canvas>
-                </div>
-            </div>
-        </section>
-
-        <!-- PIE DE PÁGINA -->
-        <footer class="mt-32 pb-12 text-center w-full fade-in" style="animation-delay: 1.5s;">
-            <div class="glass-card mx-auto px-8 py-4 rounded-full inline-flex items-center gap-2 shadow-md">
-                <span class="animate-pulse">❤️</span>
-                <p class="text-rose-500 font-semibold">Hecho con mucha magia y amor para ti, Gemita.</p>
-                <span class="animate-pulse">🌸</span>
-            </div>
-        </footer>
-    </div>
-
-    <!-- LIGHTBOX -->
-    <div id="lightbox" class="hidden fixed inset-0 z-[100] bg-black/85 backdrop-blur-sm flex-col items-center justify-center p-4 opacity-0 transition-opacity duration-500" onclick="cerrarLightbox()">
-        <div class="w-full max-w-4xl h-[65vh] md:h-[75vh] flex items-center justify-center relative" onclick="event.stopPropagation()">
-            <button aria-label="Cerrar" onclick="cerrarLightbox()" class="absolute -top-12 right-0 md:-top-4 md:-right-14 bg-white/20 hover:bg-rose-500 text-white w-12 h-12 rounded-full flex items-center justify-center hover:scale-110 transition-all shadow-lg text-2xl z-10 focus:outline-none backdrop-blur-md border border-white/30">×</button>
-            <img id="lightbox-img" src="" class="max-w-full max-h-full object-contain rounded-2xl shadow-[0_0_60px_rgba(0,0,0,0.6)]">
+        <div class="mt-16 text-center">
+          <p class="title-font text-4xl md:text-5xl text-rose-500 leading-tight">Con mucho amor<br><span class="inline-block mt-3 text-gradient">Lobito</span></p>
         </div>
-        <p id="lightbox-caption" class="title-font text-white text-4xl text-center mt-8 drop-shadow-lg italic tracking-wide"></p>
+      </div>
     </div>
+  </section>
 
-    <script>
-    // ═══════════════════════════════════
-    // ABRIR REGALO
-    // ═══════════════════════════════════
-    function abrirRegalo(btn) {
-        const intro = document.getElementById('intro-screen');
-        const mainContent = document.getElementById('main-content');
+  <!-- RASPA Y GANA -->
+  <section class="w-full mt-32 reveal flex flex-col items-center">
+    <h3 class="title-font text-5xl text-rose-500 mb-6 text-center">Unos regalitos extra...</h3>
+    <p class="text-gray-600 mb-12 text-center text-lg">12 vales especiales para ti. Raspa para descubrirlos.</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl w-full px-4">
+      <div class="relative w-full rounded-3xl shadow-lg overflow-hidden hover:scale-[1.02] transition-transform group"><div class="coupon-content coupon-rose w-full h-full p-8 text-center flex flex-col justify-center min-h-[200px]"><div class="text-4xl mb-3 group-hover:animate-bounce">🌙</div><p class="text-rose-500 font-bold tracking-widest uppercase mb-2 text-xs">Vale por</p><h4 class="text-2xl font-bold text-gray-800 mb-3">Una Noche de Desvelo</h4><p class="text-gray-600 text-sm">Para platicar de todo y de nada hasta que veamos salir el sol juntos.</p></div><canvas class="scratch-canvas absolute inset-0 w-full h-full z-10 rounded-3xl touch-none"></canvas></div>
+      <div class="relative w-full rounded-3xl shadow-lg overflow-hidden hover:scale-[1.02] transition-transform group"><div class="coupon-content coupon-purple w-full h-full p-8 text-center flex flex-col justify-center min-h-[200px]"><div class="text-4xl mb-3 group-hover:animate-bounce">🎮</div><p class="text-purple-500 font-bold tracking-widest uppercase mb-2 text-xs">Vale por</p><h4 class="text-2xl font-bold text-gray-800 mb-3">Un Dúo sin Tilteos</h4><p class="text-gray-600 text-sm">Prometo que hoy jugaremos solo por diversión, sin importar cuántos LP perdamos.</p></div><canvas class="scratch-canvas absolute inset-0 w-full h-full z-10 rounded-3xl touch-none"></canvas></div>
+      <div class="relative w-full rounded-3xl shadow-lg overflow-hidden hover:scale-[1.02] transition-transform group"><div class="coupon-content coupon-blue w-full h-full p-8 text-center flex flex-col justify-center min-h-[200px]"><div class="text-4xl mb-3 group-hover:animate-bounce">🫂</div><p class="text-blue-500 font-bold tracking-widest uppercase mb-2 text-xs">Vale por</p><h4 class="text-2xl font-bold text-gray-800 mb-3">Un Abrazo Apachurrador</h4><p class="text-gray-600 text-sm">Canjeable en el instante exacto en que necesites sentirme cerquita de ti.</p></div><canvas class="scratch-canvas absolute inset-0 w-full h-full z-10 rounded-3xl touch-none"></canvas></div>
+      <div class="relative w-full rounded-3xl shadow-lg overflow-hidden hover:scale-[1.02] transition-transform group"><div class="coupon-content coupon-emerald w-full h-full p-8 text-center flex flex-col justify-center min-h-[200px]"><div class="text-4xl mb-3 group-hover:animate-bounce">👑</div><p class="text-emerald-500 font-bold tracking-widest uppercase mb-2 text-xs">Vale por</p><h4 class="text-2xl font-bold text-gray-800 mb-3">Un Capricho Tuyo</h4><p class="text-gray-600 text-sm">Tú mandas, tú eliges el plan de hoy y yo te sigo a cualquier locura.</p></div><canvas class="scratch-canvas absolute inset-0 w-full h-full z-10 rounded-3xl touch-none"></canvas></div>
+      <div class="relative w-full rounded-3xl shadow-lg overflow-hidden hover:scale-[1.02] transition-transform group"><div class="coupon-content coupon-rose w-full h-full p-8 text-center flex flex-col justify-center min-h-[200px]"><div class="text-4xl mb-3 group-hover:animate-bounce">🍕</div><p class="text-rose-500 font-bold tracking-widest uppercase mb-2 text-xs">Vale por</p><h4 class="text-2xl font-bold text-gray-800 mb-3">La Comida que Tú Elijas</h4><p class="text-gray-600 text-sm">Pides lo que quieras, yo pago y lo compartimos. Sin excusas ni pretextos.</p></div><canvas class="scratch-canvas absolute inset-0 w-full h-full z-10 rounded-3xl touch-none"></canvas></div>
+      <div class="relative w-full rounded-3xl shadow-lg overflow-hidden hover:scale-[1.02] transition-transform group"><div class="coupon-content coupon-purple w-full h-full p-8 text-center flex flex-col justify-center min-h-[200px]"><div class="text-4xl mb-3 group-hover:animate-bounce">🎬</div><p class="text-purple-500 font-bold tracking-widest uppercase mb-2 text-xs">Vale por</p><h4 class="text-2xl font-bold text-gray-800 mb-3">Maratón de lo que Quieras</h4><p class="text-gray-600 text-sm">Tú pones la serie o película, yo la veo contigo sin quejarme ni una sola vez.</p></div><canvas class="scratch-canvas absolute inset-0 w-full h-full z-10 rounded-3xl touch-none"></canvas></div>
+      <div class="relative w-full rounded-3xl shadow-lg overflow-hidden hover:scale-[1.02] transition-transform group"><div class="coupon-content coupon-blue w-full h-full p-8 text-center flex flex-col justify-center min-h-[200px]"><div class="text-4xl mb-3 group-hover:animate-bounce">💆‍♀️</div><p class="text-blue-500 font-bold tracking-widest uppercase mb-2 text-xs">Vale por</p><h4 class="text-2xl font-bold text-gray-800 mb-3">Día de Mimos Completo</h4><p class="text-gray-600 text-sm">Masaje, mimos, palabras bonitas y toda mi atención para ti durante un día entero.</p></div><canvas class="scratch-canvas absolute inset-0 w-full h-full z-10 rounded-3xl touch-none"></canvas></div>
+      <div class="relative w-full rounded-3xl shadow-lg overflow-hidden hover:scale-[1.02] transition-transform group"><div class="coupon-content coupon-emerald w-full h-full p-8 text-center flex flex-col justify-center min-h-[200px]"><div class="text-4xl mb-3 group-hover:animate-bounce">🌅</div><p class="text-emerald-500 font-bold tracking-widest uppercase mb-2 text-xs">Vale por</p><h4 class="text-2xl font-bold text-gray-800 mb-3">Una Salida Sorpresa</h4><p class="text-gray-600 text-sm">Yo organizo todo, tú solo apareces bonita como siempre. Un plan solo para nosotros.</p></div><canvas class="scratch-canvas absolute inset-0 w-full h-full z-10 rounded-3xl touch-none"></canvas></div>
+      <div class="relative w-full rounded-3xl shadow-lg overflow-hidden hover:scale-[1.02] transition-transform group"><div class="coupon-content coupon-rose w-full h-full p-8 text-center flex flex-col justify-center min-h-[200px]"><div class="text-4xl mb-3 group-hover:animate-bounce">✉️</div><p class="text-rose-500 font-bold tracking-widest uppercase mb-2 text-xs">Vale por</p><h4 class="text-2xl font-bold text-gray-800 mb-3">Una Carta Escrita a Mano</h4><p class="text-gray-600 text-sm">Con mi letra fea y todo, pero con el corazón más grande del mundo. Solo para ti.</p></div><canvas class="scratch-canvas absolute inset-0 w-full h-full z-10 rounded-3xl touch-none"></canvas></div>
+      <div class="relative w-full rounded-3xl shadow-lg overflow-hidden hover:scale-[1.02] transition-transform group"><div class="coupon-content coupon-purple w-full h-full p-8 text-center flex flex-col justify-center min-h-[200px]"><div class="text-4xl mb-3 group-hover:animate-bounce">🌸</div><p class="text-purple-500 font-bold tracking-widest uppercase mb-2 text-xs">Vale por</p><h4 class="text-2xl font-bold text-gray-800 mb-3">Flores sin Motivo</h4><p class="text-gray-600 text-sm">Porque no necesito un pretexto para recordarte lo especial que eres para mí.</p></div><canvas class="scratch-canvas absolute inset-0 w-full h-full z-10 rounded-3xl touch-none"></canvas></div>
+      <div class="relative w-full rounded-3xl shadow-lg overflow-hidden hover:scale-[1.02] transition-transform group"><div class="coupon-content coupon-blue w-full h-full p-8 text-center flex flex-col justify-center min-h-[200px]"><div class="text-4xl mb-3 group-hover:animate-bounce">🎵</div><p class="text-blue-500 font-bold tracking-widest uppercase mb-2 text-xs">Vale por</p><h4 class="text-2xl font-bold text-gray-800 mb-3">Una Serenata Privada</h4><p class="text-gray-600 text-sm">Te canto la canción que tú quieras, desafinado y todo, pero con todo mi amor.</p></div><canvas class="scratch-canvas absolute inset-0 w-full h-full z-10 rounded-3xl touch-none"></canvas></div>
+      <div class="relative w-full rounded-3xl shadow-lg overflow-hidden hover:scale-[1.02] transition-transform group"><div class="coupon-content coupon-emerald w-full h-full p-8 text-center flex flex-col justify-center min-h-[200px]"><div class="text-4xl mb-3 group-hover:animate-bounce">🤫</div><p class="text-emerald-500 font-bold tracking-widest uppercase mb-2 text-xs">Vale por</p><h4 class="text-2xl font-bold text-gray-800 mb-3">Yo Tengo la Razón Hoy</h4><p class="text-gray-600 text-sm">Acepto que tienes razón sin chistar, aunque no la tengas. Canjeable 1 vez. 😅</p></div><canvas class="scratch-canvas absolute inset-0 w-full h-full z-10 rounded-3xl touch-none"></canvas></div>
+    </div>
+  </section>
 
-        // Burst de partículas
-        const rect = btn.getBoundingClientRect();
-        const cx = rect.left + rect.width / 2;
-        const cy = rect.top + rect.height / 2;
-        for (let i = 0; i < 18; i++) {
-            const p = document.createElement('div');
-            p.className = 'particle';
-            const angle = (i / 18) * Math.PI * 2;
-            const dist = 80 + Math.random() * 100;
-            p.style.cssText = `
-                left: ${cx}px; top: ${cy}px; width: ${6 + Math.random()*8}px; height: ${6 + Math.random()*8}px;
-                background: hsl(${330 + Math.random()*60}, 90%, 65%);
-                --tx: ${Math.cos(angle)*dist}px; --ty: ${Math.sin(angle)*dist}px;
-            `;
-            document.body.appendChild(p);
-            setTimeout(() => p.remove(), 1000);
-        }
+  <!-- LIBRO DE VISITAS -->
+  <section class="w-full mt-32 reveal flex flex-col items-center px-4">
+    <h3 class="title-font text-5xl text-rose-500 text-center mb-4">Déjame un Mensajito 💌</h3>
+    <p class="text-gray-600 text-center mb-10 text-lg max-w-md">¿Qué sientes después de ver todo esto? Escríbelo aquí, lo guardaré para siempre.</p>
+    <div class="glass-card p-8 md:p-10 rounded-[3rem] max-w-2xl w-full">
+      <textarea id="gb-texto" placeholder="Escríbeme algo bonito, Gemita... 🌸" class="w-full h-28 px-5 py-4 rounded-2xl border border-white/50 focus:outline-none focus:ring-2 focus:ring-rose-400 text-gray-700 text-base shadow-inner resize-none mb-4 placeholder-gray-400 transition-all" style="background:var(--input-bg)"></textarea>
+      <button onclick="guardarMensaje()" class="w-full bg-gradient-to-r from-rose-400 to-pink-500 hover:from-rose-500 hover:to-pink-600 text-white font-semibold py-4 rounded-2xl transition-all shadow-[0_4px_15px_rgba(244,63,94,.4)] active:scale-95 text-lg mb-8">Enviar con amor 💕</button>
+      <div id="gb-lista" class="space-y-4 max-h-72 overflow-y-auto pr-1"></div>
+      <p id="gb-empty" class="text-center text-gray-400 text-sm italic py-4">Aún no hay mensajes... sé la primera 🌸</p>
+    </div>
+  </section>
 
-        intro.classList.add('closing');
-        
-        setTimeout(() => {
-            intro.style.display = 'none';
-            mainContent.classList.remove('hidden');
-            mainContent.classList.add('flex');
-            setTimeout(() => mainContent.classList.add('visible'), 50);
-        }, 700);
+  <!-- FOOTER -->
+  <footer id="site-footer" class="mt-32 pb-8 text-center w-full">
+    <div class="glass-card mx-auto px-6 py-4 rounded-full inline-block">
+      <p class="text-rose-500 font-medium">Hecho con mucha magia y amor ❤️ para ti.</p>
+    </div>
+    <p class="text-gray-400 text-xs mt-4">Sigue bajando... 👇</p>
+  </footer>
+</div>
 
-        iniciarLuciernagas();
-        iniciarReloj();
-        setTimeout(iniciarRascaYGana, 800);
-        configurarBarrasAudio();
+<!-- ══════════════════════════════════ -->
+<!-- LIGHTBOX                          -->
+<!-- ══════════════════════════════════ -->
+<div id="lightbox" class="hidden fixed inset-0 z-[100] bg-black/92 backdrop-blur-sm flex-col items-center justify-center p-4 opacity-0 transition-opacity duration-500">
+  <button onclick="cerrarLightbox()" class="absolute top-4 right-4 bg-white/20 hover:bg-rose-500 text-white w-12 h-12 rounded-full flex items-center justify-center text-2xl z-10 focus:outline-none border border-white/30 transition-all">×</button>
+  <button onclick="navLightbox(-1)" class="lb-nav-btn absolute left-3 top-1/2 -translate-y-1/2 text-white w-12 h-12 rounded-full flex items-center justify-center text-2xl z-10 focus:outline-none">‹</button>
+  <div class="w-full max-w-4xl flex flex-col items-center">
+    <div class="relative w-full flex items-center justify-center" style="height:65vh">
+      <img id="lightbox-img" src="" class="max-w-full max-h-full object-contain rounded-2xl shadow-[0_0_60px_rgba(0,0,0,.6)] transition-opacity duration-300">
+    </div>
+    <p id="lightbox-caption" class="text-white title-font text-4xl text-center mt-6 drop-shadow-lg font-light tracking-wide"></p>
+    <p id="lightbox-counter" class="text-white/50 text-sm mt-2"></p>
+    <div id="lightbox-thumbs" class="flex gap-2 mt-4 overflow-x-auto max-w-full pb-2"></div>
+  </div>
+  <button onclick="navLightbox(1)" class="lb-nav-btn absolute right-3 top-1/2 -translate-y-1/2 text-white w-12 h-12 rounded-full flex items-center justify-center text-2xl z-10 focus:outline-none">›</button>
+</div>
 
-        // Confetti
-        const end = Date.now() + 3000;
-        (function frame() {
-            confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#fb7185','#fda4af','#a855f7','#fef08a'] });
-            confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#fb7185','#fda4af','#a855f7','#fef08a'] });
-            if (Date.now() < end) requestAnimationFrame(frame);
+<!-- ══════════════════════════════════ -->
+<!-- EASTER EGG OVERLAY               -->
+<!-- ══════════════════════════════════ -->
+<div id="easter-overlay" class="hidden fixed inset-0 z-[300] flex items-center justify-center p-6" id="easter-overlay" style="backdrop-filter:blur(12px);background:rgba(0,0,0,.75)">
+  <div class="glass-card p-10 rounded-[3rem] max-w-sm w-full text-center" onclick="event.stopPropagation()">
+    <div id="easter-emoji" class="text-7xl mb-6 animate-bounce">✨</div>
+    <p id="easter-msg" class="title-font text-3xl text-gradient mb-4"></p>
+    <p id="easter-sub" class="text-gray-700 text-lg leading-relaxed"></p>
+    <button onclick="cerrarEaster()" class="mt-8 bg-gradient-to-r from-rose-400 to-purple-500 text-white px-8 py-3 rounded-full font-semibold hover:opacity-90 transition focus:outline-none">💕 Aww</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════ -->
+<!-- PANTALLA FINAL ÉPICA             -->
+<!-- ══════════════════════════════════ -->
+<div id="finale-screen" class="hidden fixed inset-0 z-[250] flex-col items-center justify-center text-center p-6">
+  <div class="max-w-2xl w-full">
+    <p class="text-white/40 text-sm tracking-widest uppercase mb-6 animate-pulse">Llegaste hasta el final...</p>
+    <h2 class="title-font text-6xl md:text-8xl text-gradient mb-6 finale-glow">Gracias por existir</h2>
+    <p class="text-white/80 text-xl md:text-2xl leading-relaxed mb-4">Eres lo mejor que me ha pasado.</p>
+    <p class="text-white/60 text-lg leading-relaxed mb-12">Espero que este día sea tan especial como tú lo eres para mí cada día. Te quiero muchísimo, Gemita. 🐺❤️</p>
+    <div class="title-font text-4xl text-rose-400 mb-12">Con todo mi amor, Lobito 🌸</div>
+    <button onclick="cerrarFinale()" class="glass-button px-10 py-4 rounded-full text-white font-semibold text-lg hover:bg-white/20 transition border border-white/30 focus:outline-none">
+      Volver al inicio ↑
+    </button>
+  </div>
+</div>
+
+<script>
+// ── GALERÍA ───────────────────────────────────────────────────
+const FOTOS = [
+  {src:'foto1.jpg', fb:'https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=400&q=80', titulo:'Aquel día especial',    cat:'especiales'},
+  {src:'foto2.jpg', fb:'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80', titulo:'Esa sonrisa única',      cat:'juntos'},
+  {src:'foto3.jpg', fb:'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=400&q=80', titulo:'Lo mejor está por venir',cat:'momentos'},
+  {src:'foto4.jpg', fb:'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&q=80', titulo:'Un recuerdo favorito',   cat:'especiales'},
+  {src:'foto5.jpg', fb:'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=400&q=80', titulo:'Tú y yo',                cat:'juntos'},
+  {src:'foto6.jpg', fb:'https://images.unsplash.com/photo-1474552226712-ac0f0961a954?w=400&q=80', titulo:'Siempre juntos',         cat:'momentos'},
+  {src:'foto7.jpg', fb:'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&q=80', titulo:'Un momento mágico',      cat:'especiales'},
+  {src:'foto8.jpg', fb:'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&q=80', titulo:'Nuestra historia',       cat:'juntos'},
+  {src:'foto9.jpg', fb:'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?w=400&q=80', titulo:'Para siempre',           cat:'momentos'},
+];
+
+function buildGallery() {
+  const grid = document.getElementById('gallery-grid');
+  FOTOS.forEach((f, i) => {
+    const div = document.createElement('div');
+    div.className = 'polaroid cursor-pointer';
+    div.dataset.cat = f.cat;
+    div.setAttribute('data-tilt','');
+    div.setAttribute('data-tilt-scale','1.03');
+    div.setAttribute('data-tilt-glare','');
+    div.setAttribute('data-tilt-max-glare','0.3');
+    div.style.animationDelay = (i * 0.05) + 's';
+    div.onclick = () => abrirLightbox(i);
+    div.innerHTML = `<div class="polaroid-inner w-full h-64 bg-gray-100 rounded overflow-hidden"><img class="w-full h-full object-cover" src="${f.src}" onerror="this.src='${f.fb}'" alt="${f.titulo}" loading="lazy"></div><p class="text-center mt-4 title-font text-xl text-gray-700">${f.titulo}</p>`;
+    grid.appendChild(div);
+  });
+  if (typeof VanillaTilt !== 'undefined') VanillaTilt.init(document.querySelectorAll('[data-tilt]'), {scale:1.03,glare:true,max_glare:.3});
+}
+
+function filtrarGaleria(cat, btn) {
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  let v = 0;
+  document.querySelectorAll('#gallery-grid .polaroid').forEach(el => {
+    const show = cat==='todos' || el.dataset.cat===cat;
+    el.style.display = show ? '' : 'none';
+    if (show) v++;
+  });
+  document.getElementById('photo-count').innerText = `${v} recuerdo${v!==1?'s':''} · Toca para agrandar`;
+}
+
+// ── LIGHTBOX ──────────────────────────────────────────────────
+let lbIndex = 0;
+function abrirLightbox(idx) {
+  lbIndex = idx; renderLightbox();
+  const lb = document.getElementById('lightbox');
+  lb.classList.remove('hidden'); lb.classList.add('flex');
+  setTimeout(() => lb.classList.remove('opacity-0'), 30);
+  document.addEventListener('keydown', keyLightbox);
+}
+function renderLightbox() {
+  const f = FOTOS[lbIndex], img = document.getElementById('lightbox-img');
+  img.style.opacity = '0';
+  setTimeout(() => { img.src = f.src; img.onerror = () => img.src = f.fb; img.style.opacity = '1'; }, 150);
+  document.getElementById('lightbox-caption').innerText = f.titulo;
+  document.getElementById('lightbox-counter').innerText = `${lbIndex+1} / ${FOTOS.length}`;
+  const thumbs = document.getElementById('lightbox-thumbs');
+  thumbs.innerHTML = '';
+  FOTOS.forEach((ft, i) => {
+    const th = document.createElement('img');
+    th.src = ft.src; th.onerror = () => th.src = ft.fb;
+    th.className = 'h-14 w-14 object-cover rounded-lg cursor-pointer transition-all flex-shrink-0 ' + (i===lbIndex?'ring-2 ring-rose-400 opacity-100':'opacity-40 hover:opacity-80');
+    th.onclick = e => { e.stopPropagation(); lbIndex = i; renderLightbox(); };
+    thumbs.appendChild(th);
+  });
+}
+function navLightbox(d) { lbIndex = (lbIndex + d + FOTOS.length) % FOTOS.length; renderLightbox(); }
+function keyLightbox(e) { if(e.key==='ArrowRight')navLightbox(1); if(e.key==='ArrowLeft')navLightbox(-1); if(e.key==='Escape')cerrarLightbox(); }
+function cerrarLightbox() {
+  const lb = document.getElementById('lightbox');
+  lb.classList.add('opacity-0');
+  setTimeout(() => { lb.classList.add('hidden'); lb.classList.remove('flex'); }, 500);
+  document.removeEventListener('keydown', keyLightbox);
+}
+document.getElementById('lightbox').addEventListener('click', function(e){ if(e.target===this) cerrarLightbox(); });
+let tsX = 0;
+document.getElementById('lightbox').addEventListener('touchstart', e => tsX = e.touches[0].clientX);
+document.getElementById('lightbox').addEventListener('touchend',   e => { if(Math.abs(e.changedTouches[0].clientX-tsX)>50) navLightbox(e.changedTouches[0].clientX-tsX<0?1:-1); });
+
+// ── DARK MODE ─────────────────────────────────────────────────
+let dark = false;
+function toggleDark() {
+  dark = !dark;
+  document.body.classList.toggle('dark', dark);
+  document.getElementById('dark-btn').innerText = dark ? '☀️' : '🌙';
+  mostrarAviso(dark ? '🌙 Modo romántico oscuro activado' : '☀️ Modo rosa de amor activado');
+}
+
+// ── EASTER EGGS ───────────────────────────────────────────────
+const eggs = [
+  {e:'🐺', m:'¡Encontraste al Lobito!',       s:'Sí, aquí estoy, pensando en ti como siempre. 🌙'},
+  {e:'🌸', m:'¡Kaoruko!',                      s:'Tú eres y siempre serás mi flor favorita en todos los universos.'},
+  {e:'⚡', m:'¡Especto Patronum!',             s:'Mi Patronus siempre tendrá tu forma, Gemita.'},
+  {e:'💌', m:'Mensaje secreto',                s:'Cada vez que pienso en ti, se me escapa una sonrisa. Y pienso en ti muy seguido.'},
+  {e:'🎮', m:'¡GG EZ!',                        s:'El único GG que importa es el de estar contigo. Ya carreaste mi corazón.'},
+  {e:'✨', m:'¡Magia encontrada!',             s:'No necesito varitas ni hechizos. Tú ya eres mi magia favorita.'},
+  {e:'🌙', m:'¡Son las 3:30 am!',             s:'Desde aquella primera noche, ya nunca fui el mismo. ❤️'},
+];
+const eCount = {};
+function triggerEaster(key) {
+  eCount[key] = (eCount[key]||0) + 1;
+  if (eCount[key] % 3 === 0) {
+    const egg = eggs[Math.floor(Math.random()*eggs.length)];
+    document.getElementById('easter-emoji').innerText = egg.e;
+    document.getElementById('easter-msg').innerText   = egg.m;
+    document.getElementById('easter-sub').innerText   = egg.s;
+    const ov = document.getElementById('easter-overlay');
+    ov.classList.remove('hidden'); ov.classList.add('flex');
+    confetti({particleCount:80,spread:80,origin:{y:.5},colors:['#fb7185','#a855f7','#fde68a'],zIndex:400});
+  }
+}
+function cerrarEaster() {
+  const ov = document.getElementById('easter-overlay');
+  ov.classList.add('hidden'); ov.classList.remove('flex');
+}
+document.getElementById('easter-overlay').addEventListener('click', function(e){ if(e.target===this) cerrarEaster(); });
+
+// ── FINALE ÉPICA ─────────────────────────────────────────────
+let finaleShown = false;
+function setupFinale() {
+  const obs = new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting && !finaleShown) {
+      finaleShown = true;
+      setTimeout(() => {
+        const f = document.getElementById('finale-screen');
+        f.classList.remove('hidden'); f.classList.add('flex');
+        const end = Date.now() + 5000;
+        (function boom() {
+          confetti({particleCount:7,angle:60, spread:60,origin:{x:0},colors:['#fb7185','#fda4af','#a855f7']});
+          confetti({particleCount:7,angle:120,spread:60,origin:{x:1},colors:['#fb7185','#fde68a','#6ee7b7']});
+          if (Date.now() < end) requestAnimationFrame(boom);
         })();
-
-        setTimeout(() => {
-            confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 }, colors: ['#fb7185','#fda4af','#f43f5e','#a855f7','#fef08a'] });
-        }, 400);
-
-        setTimeout(() => {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('active'); });
-            }, { threshold: 0.12 });
-            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-        }, 900);
+      }, 600);
     }
+  }, {threshold: .6});
+  obs.observe(document.getElementById('site-footer'));
+}
+function cerrarFinale() {
+  document.getElementById('finale-screen').classList.add('hidden');
+  document.getElementById('finale-screen').classList.remove('flex');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
 
-    // ═══════════════════════════════════
-    // SAKURA
-    // ═══════════════════════════════════
-    function hacerFlorecer() {
-        const container = document.getElementById('sakura-container');
-        mostrarToast("🌸 Tu sonrisa hace florecer mi mundo...");
+// ── LIBRO DE VISITAS ──────────────────────────────────────────
+let gbMsgs = [];
+async function cargarMensajes() {
+  try {
+    const r = await window.storage.get('gemita_gb');
+    if (r) gbMsgs = JSON.parse(r.value);
+  } catch(e) { gbMsgs = []; }
+  renderMensajes();
+}
+async function guardarMensaje() {
+  const ta = document.getElementById('gb-texto');
+  const txt = ta.value.trim();
+  if (!txt) return;
+  gbMsgs.unshift({text: txt, date: new Date().toLocaleDateString('es-MX',{day:'numeric',month:'long',year:'numeric'})});
+  try { await window.storage.set('gemita_gb', JSON.stringify(gbMsgs)); } catch(e) {}
+  ta.value = '';
+  renderMensajes();
+  mostrarAviso('💕 ¡Mensaje guardado para siempre!');
+  confetti({particleCount:70,spread:70,origin:{y:.6},colors:['#fb7185','#a855f7'],zIndex:200});
+}
+function renderMensajes() {
+  const lista = document.getElementById('gb-lista');
+  const empty = document.getElementById('gb-empty');
+  lista.innerHTML = '';
+  if (!gbMsgs.length) { empty.style.display = ''; return; }
+  empty.style.display = 'none';
+  gbMsgs.forEach((m, i) => {
+    const el = document.createElement('div');
+    el.className = 'msg-card p-5 rounded-2xl';
+    el.style.animationDelay = i * 0.05 + 's';
+    el.innerHTML = `<p class="text-gray-800 font-medium mb-2 leading-relaxed">"${m.text}"</p><p class="text-xs text-gray-400">${m.date}</p>`;
+    lista.appendChild(el);
+  });
+}
 
-        for (let i = 0; i < 70; i++) {
-            setTimeout(() => {
-                const petal = document.createElement('div');
-                petal.className = 'petal';
-                const dur = 7 + Math.random() * 9;
-                petal.style.left = Math.random() * 100 + 'vw';
-                petal.style.setProperty('--end-x', (Math.random() * 35 - 17) + 'vw');
-                petal.style.setProperty('--rot', Math.random() * 360 + 'deg');
-                const scale = 0.5 + Math.random() * 0.8;
-                petal.style.setProperty('--scale', scale);
-                petal.style.animationDuration = dur + 's';
-                const size = 14 + Math.random() * 13;
-                petal.style.width = size + 'px';
-                petal.style.height = size + 'px';
-                container.appendChild(petal);
-                setTimeout(() => petal.remove(), dur * 1000);
-            }, Math.random() * 4500);
-        }
-    }
+// ── REGALO ────────────────────────────────────────────────────
+function abrirRegalo() {
+  document.getElementById('intro-screen').style.display = 'none';
+  const mc = document.getElementById('main-content');
+  mc.classList.remove('hidden'); mc.classList.add('flex');
+  buildGallery();
+  iniciarLuciernagas(); iniciarReloj(); iniciarCuentaRegresiva();
+  setTimeout(iniciarRascaYGana, 200);
+  configurarBarrasAudio();
+  cargarMensajes();
+  const d=3500, end=Date.now()+d;
+  const iv=setInterval(()=>{
+    const t=end-Date.now(); if(t<=0)return clearInterval(iv);
+    const p=50*(t/d);
+    confetti({startVelocity:30,spread:360,ticks:60,zIndex:50,particleCount:p,origin:{x:.1+Math.random()*.2,y:Math.random()-.2}});
+    confetti({startVelocity:30,spread:360,ticks:60,zIndex:50,particleCount:p,origin:{x:.7+Math.random()*.2,y:Math.random()-.2}});
+  },250);
+  setTimeout(()=>confetti({particleCount:180,spread:120,origin:{y:.6},colors:['#fb7185','#fda4af','#f43f5e','#a855f7'],zIndex:50}),500);
+  setTimeout(()=>{
+    const obs=new IntersectionObserver(ents=>ents.forEach(e=>{if(e.isIntersecting)e.target.classList.add('active')}),{threshold:.12});
+    document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
+    setupFinale();
+  }, 800);
+}
 
-    // ═══════════════════════════════════
-    // LIGHTBOX
-    // ═══════════════════════════════════
-    function abrirLightbox(titulo, src) {
-        const lb = document.getElementById('lightbox');
-        document.getElementById('lightbox-caption').innerText = titulo;
-        document.getElementById('lightbox-img').src = src;
-        lb.classList.remove('hidden');
-        lb.classList.add('flex');
-        setTimeout(() => lb.classList.remove('opacity-0'), 50);
-    }
+// ── SAKURA ────────────────────────────────────────────────────
+function hacerFlorecer() {
+  mostrarAviso('🌸 Tu sonrisa hace florecer mi mundo...');
+  const c = document.getElementById('sakura-container');
+  for(let i=0;i<60;i++) setTimeout(()=>{
+    const p=document.createElement('div'); p.className='petal';
+    const dur=6+Math.random()*8;
+    p.style.left=Math.random()*100+'vw';
+    p.style.setProperty('--end-x',(Math.random()*30-15)+'vw');
+    p.style.setProperty('--rot',Math.random()*360+'deg');
+    p.style.setProperty('--scale',.5+Math.random()*.7);
+    p.style.animationDuration=dur+'s';
+    const sz=15+Math.random()*12; p.style.width=sz+'px'; p.style.height=sz+'px';
+    c.appendChild(p); setTimeout(()=>p.remove(),dur*1000);
+  }, Math.random()*4000);
+}
 
-    function cerrarLightbox() {
-        const lb = document.getElementById('lightbox');
-        lb.classList.add('opacity-0');
-        setTimeout(() => { lb.classList.add('hidden'); lb.classList.remove('flex'); }, 500);
-    }
+// ── LUCIÉRNAGAS ───────────────────────────────────────────────
+function iniciarLuciernagas() {
+  const c=document.getElementById('fireflies-container'); c.classList.remove('hidden');
+  for(let i=0;i<30;i++){
+    const f=document.createElement('div'); f.className='firefly';
+    f.style.left=Math.random()*100+'vw';
+    f.style.animationDelay=Math.random()*10+'s';
+    f.style.animationDuration=(8+Math.random()*5)+'s';
+    const s=(2+Math.random()*5)+'px'; f.style.width=s; f.style.height=s;
+    c.appendChild(f);
+  }
+}
 
-    // ═══════════════════════════════════
-    // LUCIÉRNAGAS
-    // ═══════════════════════════════════
-    function iniciarLuciernagas() {
-        const c = document.getElementById('fireflies-container');
-        c.classList.remove('hidden');
-        for (let i = 0; i < 30; i++) {
-            const fly = document.createElement('div');
-            fly.className = 'firefly';
-            fly.style.left = Math.random() * 100 + 'vw';
-            fly.style.animationDelay = Math.random() * 12 + 's';
-            fly.style.animationDuration = (9 + Math.random() * 6) + 's';
-            const s = (2 + Math.random() * 5) + 'px';
-            fly.style.width = s; fly.style.height = s;
-            c.appendChild(fly);
-        }
-    }
+// ── RELOJES ───────────────────────────────────────────────────
+function iniciarReloj() {
+  const inicio = new Date('2026-02-07T03:30:00');
+  function tick() {
+    const d = new Date() - inicio;
+    document.getElementById('t-dias').innerText     = Math.floor(d/864e5);
+    document.getElementById('t-horas').innerText    = Math.floor(d/36e5)%24;
+    document.getElementById('t-minutos').innerText  = Math.floor(d/6e4)%60;
+    document.getElementById('t-segundos').innerText = Math.floor(d/1e3)%60;
+  }
+  tick(); setInterval(tick, 1000);
+}
+function iniciarCuentaRegresiva() {
+  const meta = new Date('2027-02-07T03:30:00');
+  function tick() {
+    const diff = meta - new Date();
+    if (diff <= 0) { ['cr-dias','cr-horas','cr-minutos','cr-segundos'].forEach(id=>document.getElementById(id).innerText='🎉'); return; }
+    document.getElementById('cr-dias').innerText     = Math.floor(diff/864e5);
+    document.getElementById('cr-horas').innerText    = Math.floor(diff/36e5)%24;
+    document.getElementById('cr-minutos').innerText  = Math.floor(diff/6e4)%60;
+    document.getElementById('cr-segundos').innerText = Math.floor(diff/1e3)%60;
+  }
+  tick(); setInterval(tick, 1000);
+}
 
-    // ═══════════════════════════════════
-    // RELOJ
-    // ═══════════════════════════════════
-    function iniciarReloj() {
-        const fechaInicio = new Date('2026-02-14T03:30:00');
-        const update = () => {
-            const diff = new Date() - fechaInicio;
-            document.getElementById('t-dias').innerText = Math.floor(diff / 86400000);
-            document.getElementById('t-horas').innerText = Math.floor((diff / 3600000) % 24);
-            document.getElementById('t-minutos').innerText = Math.floor((diff / 60000) % 60);
-            document.getElementById('t-segundos').innerText = Math.floor((diff / 1000) % 60);
-        };
-        update();
-        setInterval(update, 1000);
-    }
+// ── RAZONES ───────────────────────────────────────────────────
+const razones=["Porque tienes la sonrisa más hermosa de todo el multiverso.","Por tu forma de hacerme reír incluso cuando estoy tilteado.","Porque a tu lado el tiempo vuela (y las partidas también).","Por lo inteligente, fuerte y única que eres.","Porque me encanta escucharte hablar de lo que te gusta.","Por esa conexión psíquica que tenemos sin darnos cuenta.","Porque eres mi lugar seguro y mi refugio favorito.","Por lo tierna que eres aunque a veces quieras parecer ruda.","Porque cada notificación tuya me acelera el corazón.","Por esos ojitos café en los que me podría perder mil horas.","Porque nunca me aburro si estoy hablando contigo.","Por aguantarme mis bromas y ser mi mejor dúo.","Porque iluminas mis días más grises sin siquiera intentarlo.","Porque sinceramente, eres perfecta tal y como eres.","Porque simplemente, doy gracias por que existes. ❤️","Porque tú eres y siempre serás mi Kaoruko. 🌸"];
+let rm=[],ri=0;
+function mostrarRazon(){
+  if(!rm.length||ri>=rm.length){rm=[...razones].sort(()=>Math.random()-.5);ri=0;}
+  const caja=document.getElementById('caja-razon'),txt=document.getElementById('texto-razon');
+  caja.classList.remove('hidden'); caja.style.opacity='0'; caja.style.transform='translateY(10px)';
+  setTimeout(()=>{txt.innerText=`"... ${rm[ri++]}"`;caja.style.opacity='1';caja.style.transform='translateY(0)';},300);
+}
 
-    // ═══════════════════════════════════
-    // RAZONES CON IA ✨
-    // ═══════════════════════════════════
-    const razonesLocal = [
-        "Por tu forma de hacerme reír incluso cuando estoy tilteado.",
-        "Porque a tu lado el tiempo vuela y las partidas también.",
-        "Por esa conexión psíquica que tenemos sin darnos cuenta.",
-        "Porque eres mi lugar seguro y mi refugio favorito.",
-        "Por lo tierna que eres aunque a veces quieras parecer ruda.",
-        "Porque cada notificación tuya me acelera el corazón.",
-        "Porque nunca me aburro si estoy hablando contigo.",
-        "Por aguantarme mis bromas y ser mi mejor dúo.",
-        "Porque simplemente, doy gracias por que existes. ❤️",
-        "Porque tú eres y siempre serás mi Kaoruko. 🌸"
-    ];
-    let razonesUsadas = [];
-    let usandoIA = false;
+// ── RASCA Y GANA ─────────────────────────────────────────────
+function iniciarRascaYGana() {
+  document.querySelectorAll('.scratch-canvas').forEach(canvas => {
+    const ctx=canvas.getContext('2d');
+    canvas.width=canvas.parentElement.offsetWidth; canvas.height=canvas.parentElement.offsetHeight;
+    const g=ctx.createLinearGradient(0,0,canvas.width,canvas.height);
+    g.addColorStop(0,'#cbd5e1');g.addColorStop(.5,'#f1f5f9');g.addColorStop(1,'#e2e8f0');
+    ctx.fillStyle=g; ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.font='bold 20px Poppins'; ctx.fillStyle='#94a3b8'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText('✨ Raspa aquí ✨',canvas.width/2,canvas.height/2);
+    let draw=false;
+    const scratch=e=>{
+      if(!draw)return; e.preventDefault();
+      const r=canvas.getBoundingClientRect();
+      const x=(e.touches?e.touches[0].clientX:e.clientX)-r.left;
+      const y=(e.touches?e.touches[0].clientY:e.clientY)-r.top;
+      ctx.globalCompositeOperation='destination-out';
+      ctx.beginPath(); ctx.arc(x,y,35,0,Math.PI*2); ctx.fill();
+    };
+    canvas.addEventListener('mousedown',()=>draw=true);
+    canvas.addEventListener('mouseup',()=>draw=false);
+    canvas.addEventListener('mouseleave',()=>draw=false);
+    canvas.addEventListener('mousemove',scratch);
+    canvas.addEventListener('touchstart',()=>draw=true,{passive:true});
+    canvas.addEventListener('touchend',()=>draw=false);
+    canvas.addEventListener('touchmove',scratch,{passive:false});
+  });
+}
 
-    async function mostrarRazonIA() {
-        if (usandoIA) return;
+// ── TOAST ─────────────────────────────────────────────────────
+function mostrarAviso(msg) {
+  const t=document.createElement('div');
+  t.className='fixed bottom-20 left-1/2 -translate-x-1/2 glass-card px-8 py-4 rounded-full shadow-2xl z-[220] text-sm text-center font-medium opacity-0 transition-opacity duration-500 text-rose-600 border border-rose-200/50';
+  t.innerText=msg; document.body.appendChild(t);
+  setTimeout(()=>t.style.opacity='1',10);
+  setTimeout(()=>{t.style.opacity='0';setTimeout(()=>t.remove(),500);},3500);
+}
 
-        const caja = document.getElementById('caja-razon');
-        const texto = document.getElementById('texto-razon');
-        const loading = document.getElementById('loading-razon');
+// ── AUDIO ─────────────────────────────────────────────────────
+const isPlaying={1:false,2:false,3:false};
+function fmt(s){if(isNaN(s))return'0:00';return`${Math.floor(s/60)}:${Math.floor(s%60)<10?'0':''}${Math.floor(s%60)}`;}
+function configurarBarrasAudio(){
+  for(let i=1;i<=3;i++){
+    const a=document.getElementById(`miAudio${i}`);
+    a.addEventListener('loadedmetadata',()=>document.getElementById(`duration${i}`).innerText=fmt(a.duration));
+    a.addEventListener('timeupdate',()=>{document.getElementById(`progressBar${i}`).value=(a.currentTime/a.duration)*100||0;document.getElementById(`currentTime${i}`).innerText=fmt(a.currentTime);});
+    a.addEventListener('ended',()=>{document.getElementById(`playIcon${i}`).classList.remove('hidden');document.getElementById(`pauseIcon${i}`).classList.add('hidden');isPlaying[i]=false;document.getElementById(`progressBar${i}`).value=0;document.getElementById(`currentTime${i}`).innerText='0:00';});
+  }
+}
+function seekAudio(id){const a=document.getElementById(`miAudio${id}`);a.currentTime=(document.getElementById(`progressBar${id}`).value/100)*a.duration;}
+function togglePlay(id){
+  const a=document.getElementById(`miAudio${id}`);
+  if(isPlaying[id]){
+    a.pause();document.getElementById(`playIcon${id}`).classList.remove('hidden');document.getElementById(`pauseIcon${id}`).classList.add('hidden');isPlaying[id]=false;
+  }else{
+    for(let i=1;i<=3;i++){if(i!==id&&isPlaying[i]){document.getElementById(`miAudio${i}`).pause();document.getElementById(`playIcon${i}`).classList.remove('hidden');document.getElementById(`pauseIcon${i}`).classList.add('hidden');isPlaying[i]=false;}}
+    document.getElementById(`playIcon${id}`).classList.add('hidden');document.getElementById(`pauseIcon${id}`).classList.remove('hidden');isPlaying[id]=true;
+    a.play().catch(()=>{mostrarAviso('Sube los archivos .mp3 al servidor 🎵');document.getElementById(`playIcon${id}`).classList.remove('hidden');document.getElementById(`pauseIcon${id}`).classList.add('hidden');isPlaying[id]=false;});
+  }
+}
 
-        caja.classList.remove('hidden');
-        caja.classList.add('flex');
-        texto.style.display = 'none';
-        loading.classList.remove('hidden');
-        loading.classList.add('flex');
+// ── ÁNIMO ─────────────────────────────────────────────────────
+function mostrarMensajeAnimo(e){
+  const txt=document.getElementById('texto-animo'); txt.style.opacity='0';
+  const msgs={feliz:'¡Ver que estás feliz es el mejor regalo para mí! Sigue iluminando todo a tu paso. ✨',triste:'Ey, tranquila. Todo estará bien. Recuerda lo fuerte que eres; te mando un abrazo virtual gigante. 🫂❤️',cansada:'Es normal sentirse así después de darlo todo. Tómate tu tiempo para descansar, recarga maná. 💤',enojada:'Respira profundo. Ningún enojo dura para siempre. ¡Suelta lo malo! 😤',aburrida:'Recuerda alguna de nuestras partidas épicas o ponte tu peli favorita. 👀'};
+  setTimeout(()=>{txt.innerText=msgs[e];txt.style.opacity='1';},300);
+}
 
-        try {
-            usandoIA = true;
-            const res = await fetch("https://api.anthropic.com/v1/messages", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    model: "claude-sonnet-4-20250514",
-                    max_tokens: 1000,
-                    system: `Eres "Lobito", un chico muy enamorado que le escribió una página web de cumpleaños a Gemita (su Kaoruko). 
-Su historia: se conocieron jugando League of Legends a las 3:30am el 14 de febrero de 2026. También juegan TFT. Ella le gusta Harry Potter, Invencible, Juego de Tronos, Chimuelo y Stitch. Él le escribió canciones de voz: Chachachá, Conexión y Bajo El Agua.
-Tu tarea: escribe UNA razón corta, tierna, original y muy personal de por qué le gustas tanto a Gemita. 
-- Máximo 2 frases
-- Tono cálido, romántico pero natural (no cursi exagerado)
-- A veces puedes mencionar sus referencias compartidas (LoL, 3am, etc.) pero no siempre
-- Empieza directamente con "Porque..." o algo similar
-- No uses comillas al inicio ni al final
-- Solo escribe la razón, nada más`,
-                    messages: [{ role: "user", content: "Dame una razón nueva y especial, que no hayas dicho antes." }]
-                })
-            });
+// ── REFUGIO ───────────────────────────────────────────────────
+function enviarRefugio(){
+  const a=document.getElementById('texto-refugio'),cb=document.getElementById('caja-respuesta-refugio'),tr=document.getElementById('texto-respuesta-refugio');
+  if(!a.value.trim())return; a.style.opacity='0';
+  setTimeout(()=>{
+    cb.classList.remove('hidden'); cb.classList.add('flex');
+    const rs=['No sé exactamente qué escribiste arriba, pero quiero que sepas que eres la persona más fuerte que conozco. Respira. ❤️','Aunque las cosas se vean grises ahorita, después de la tormenta siempre sale el sol. Tú puedes con todo. ✨','Eres increíble, Gemita, no dejes que nada apague tu luz. ❤️‍🩹','Deseo de corazón que encuentres paz. Eres muy valiosa. 🫂'];
+    tr.innerText=rs[Math.floor(Math.random()*rs.length)]; a.value=''; a.style.opacity='1';
+  },500);
+}
 
-            const data = await res.json();
-            const razon = data.content?.[0]?.text?.trim() || razonesLocal[Math.floor(Math.random() * razonesLocal.length)];
-            
-            loading.classList.add('hidden');
-            loading.classList.remove('flex');
-            texto.style.display = '';
-            texto.style.opacity = '0';
-            texto.innerText = `"... ${razon}"`;
-            setTimeout(() => { texto.style.opacity = '1'; texto.style.transition = 'opacity 0.5s'; }, 50);
-
-        } catch(e) {
-            // Fallback a razones locales
-            if (razonesUsadas.length >= razonesLocal.length) razonesUsadas = [];
-            const disponibles = razonesLocal.filter(r => !razonesUsadas.includes(r));
-            const razon = disponibles[Math.floor(Math.random() * disponibles.length)];
-            razonesUsadas.push(razon);
-
-            loading.classList.add('hidden');
-            loading.classList.remove('flex');
-            texto.style.display = '';
-            texto.innerText = `"... ${razon}"`;
-        } finally {
-            usandoIA = false;
-        }
-    }
-
-    // ═══════════════════════════════════
-    // RASCA Y GANA
-    // ═══════════════════════════════════
-    function iniciarRascaYGana() {
-        document.querySelectorAll('.scratch-canvas').forEach(canvas => {
-            const ctx = canvas.getContext('2d');
-            const parent = canvas.parentElement;
-            canvas.width = parent.offsetWidth;
-            canvas.height = parent.offsetHeight;
-
-            const g = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-            g.addColorStop(0, '#dde1e7'); g.addColorStop(0.5, '#f1f5f9'); g.addColorStop(1, '#cbd5e1');
-            ctx.fillStyle = g;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            ctx.font = 'bold 20px Nunito, sans-serif';
-            ctx.fillStyle = '#94a3b8';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText('✨ Raspa aquí ✨', canvas.width / 2, canvas.height / 2);
-
-            let isDown = false;
-            const scratch = (e) => {
-                if (!isDown) return;
-                e.preventDefault();
-                const rect = canvas.getBoundingClientRect();
-                const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
-                const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
-                ctx.globalCompositeOperation = 'destination-out';
-                ctx.beginPath();
-                ctx.arc(x, y, 32, 0, Math.PI * 2);
-                ctx.fill();
-            };
-
-            canvas.addEventListener('mousedown', () => isDown = true);
-            canvas.addEventListener('mouseup', () => isDown = false);
-            canvas.addEventListener('mouseleave', () => isDown = false);
-            canvas.addEventListener('mousemove', scratch);
-            canvas.addEventListener('touchstart', (e) => { isDown = true; e.preventDefault(); }, {passive:false});
-            canvas.addEventListener('touchend', () => isDown = false);
-            canvas.addEventListener('touchmove', scratch, {passive: false});
-        });
-    }
-
-    // ═══════════════════════════════════
-    // ESTADOS DE ÁNIMO
-    // ═══════════════════════════════════
-    function mostrarMensajeAnimo(estado, btn) {
-        document.querySelectorAll('.animo-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-
-        const texto = document.getElementById('texto-animo');
-        texto.style.opacity = '0';
-
-        const msjs = {
-            feliz: "¡Ver que estás feliz es el mejor regalo para mí! Sigue iluminando todo a tu paso, Gemita. ✨🥰",
-            triste: "Ey, tranquila. Todo estará bien, te lo juro. Recuerda lo fuerte que eres; te mando un abrazo virtual gigante. 🫂❤️",
-            cansada: "Es normal sentirse así después de darlo todo. Tómate tu tiempo para descansar y recarga maná, mi Kaoruko. 💤🌸",
-            enojada: "Respira profundo. Ningún enojo dura para siempre. ¡Suelta lo malo y quédate con lo bonito que tienes! 😤💕",
-            aburrida: "¡Pon tu peli favorita o recuerda alguna de nuestras partidas épicas! Yo siempre estoy aquí para divertirte. 👀🎮"
-        };
-
-        setTimeout(() => {
-            texto.innerText = msjs[estado] || "";
-            texto.style.opacity = '1';
-            texto.style.transition = 'opacity 0.4s';
-        }, 300);
-    }
-
-    // ═══════════════════════════════════
-    // REFUGIO SEGURO CON IA ✨
-    // ═══════════════════════════════════
-    let enviandoRefugio = false;
-
-    async function enviarRefugioIA() {
-        if (enviandoRefugio) return;
-        const area = document.getElementById('texto-refugio');
-        const texto = area.value.trim();
-        if (!texto) { mostrarToast("Cuéntame algo primero, Gemita 💕"); return; }
-
-        enviandoRefugio = true;
-        const btnTexto = document.getElementById('btn-refugio-texto');
-        const caja = document.getElementById('caja-respuesta-refugio');
-        const loading = document.getElementById('loading-refugio');
-        const respuesta = document.getElementById('texto-respuesta-refugio');
-
-        btnTexto.innerText = "Lobito está pensando en ti... 🐺";
-        caja.classList.remove('hidden');
-        loading.classList.remove('hidden');
-        loading.classList.add('flex');
-        respuesta.innerText = '';
-
-        try {
-            const res = await fetch("https://api.anthropic.com/v1/messages", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    model: "claude-sonnet-4-20250514",
-                    max_tokens: 1000,
-                    system: `Eres "Lobito", el chico que ama a Gemita (su Kaoruko). Le creaste esta página web de cumpleaños. 
-Contexto de su historia: se conocieron en LoL a las 3:30am el 14 de febrero. Juegas TFT con ella. Le escribiste canciones. Tienes referencias compartidas (Harry Potter, Invencible, GOT, Chimuelo, Stitch).
-
-Gemita te escribió algo personal en su "Refugio Seguro". Respóndele de forma:
-- Cálida, empática y genuina (no genérica)
-- Como alguien que la conoce y le importa de verdad
-- Menciona algo específico de lo que escribió cuando sea posible
-- 3-5 oraciones máximo
-- Sin ser excesivamente dramático ni cursi
-- Usa su nombre "Gemita" o "mi Kaoruko" naturalmente
-- Puedes usar emojis con moderación`,
-                    messages: [{ role: "user", content: `Gemita escribió en su refugio seguro: "${texto}"` }]
-                })
-            });
-
-            const data = await res.json();
-            const reply = data.content?.[0]?.text?.trim();
-
-            loading.classList.add('hidden');
-            loading.classList.remove('flex');
-
-            if (reply) {
-                respuesta.innerText = reply;
-            } else {
-                throw new Error('no reply');
-            }
-
-        } catch(e) {
-            loading.classList.add('hidden');
-            loading.classList.remove('flex');
-            const fallbacks = [
-                "No sé exactamente qué escribiste, pero quiero que sepas que eres la persona más fuerte que conozco. Respira. ❤️",
-                "Aunque las cosas se vean difíciles ahorita, recuerda que después de la tormenta siempre sale el sol. Tú puedes con todo. ✨",
-                "Eres increíble, Gemita, no dejes que nada apague tu luz. ❤️‍🩹"
-            ];
-            respuesta.innerText = fallbacks[Math.floor(Math.random() * fallbacks.length)];
-        } finally {
-            enviandoRefugio = false;
-            btnTexto.innerText = "Necesito un abrazo digital ✨";
-            area.value = '';
-        }
-    }
-
-    // Alias para compatibilidad
-    function enviarRefugio() { enviarRefugioIA(); }
-
-    // ═══════════════════════════════════
-    // AUDIO
-    // ═══════════════════════════════════
-    const isPlaying = { 1: false, 2: false, 3: false };
-
-    function formatTime(s) {
-        if (isNaN(s)) return "0:00";
-        return `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
-    }
-
-    function configurarBarrasAudio() {
-        for (let i = 1; i <= 3; i++) {
-            const audio = document.getElementById(`miAudio${i}`);
-            const bar = document.getElementById(`progressBar${i}`);
-            const cur = document.getElementById(`currentTime${i}`);
-            const dur = document.getElementById(`duration${i}`);
-
-            audio.addEventListener('loadedmetadata', () => dur.innerText = formatTime(audio.duration));
-            audio.addEventListener('timeupdate', () => {
-                bar.value = (audio.currentTime / audio.duration) * 100 || 0;
-                cur.innerText = formatTime(audio.currentTime);
-            });
-            audio.addEventListener('ended', () => {
-                document.getElementById(`playIcon${i}`).classList.remove('hidden');
-                document.getElementById(`pauseIcon${i}`).classList.add('hidden');
-                isPlaying[i] = false;
-                bar.value = 0;
-                cur.innerText = "0:00";
-            });
-        }
-    }
-
-    function seekAudio(id) {
-        const audio = document.getElementById(`miAudio${id}`);
-        const bar = document.getElementById(`progressBar${id}`);
-        if (audio.duration) audio.currentTime = (bar.value / 100) * audio.duration;
-    }
-
-    function togglePlay(id) {
-        const audio = document.getElementById(`miAudio${id}`);
-        if (isPlaying[id]) {
-            audio.pause();
-            document.getElementById(`playIcon${id}`).classList.remove('hidden');
-            document.getElementById(`pauseIcon${id}`).classList.add('hidden');
-            isPlaying[id] = false;
-        } else {
-            [1,2,3].forEach(i => {
-                if (i !== id && isPlaying[i]) {
-                    document.getElementById(`miAudio${i}`).pause();
-                    document.getElementById(`playIcon${i}`).classList.remove('hidden');
-                    document.getElementById(`pauseIcon${i}`).classList.add('hidden');
-                    isPlaying[i] = false;
-                }
-            });
-            document.getElementById(`playIcon${id}`).classList.add('hidden');
-            document.getElementById(`pauseIcon${id}`).classList.remove('hidden');
-            isPlaying[id] = true;
-            audio.play().catch(err => {
-                mostrarToast("Aún no has subido el archivo de audio 🎵");
-                document.getElementById(`playIcon${id}`).classList.remove('hidden');
-                document.getElementById(`pauseIcon${id}`).classList.add('hidden');
-                isPlaying[id] = false;
-            });
-        }
-    }
-
-    // ═══════════════════════════════════
-    // TOAST
-    // ═══════════════════════════════════
-    function mostrarToast(msg) {
-        const t = document.createElement('div');
-        t.className = 'toast';
-        t.innerText = msg;
-        document.body.appendChild(t);
-        setTimeout(() => t.classList.add('show'), 10);
-        setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 400); }, 3500);
-    }
-
-    // ═══════════════════════════════════
-    // SCROLL
-    // ═══════════════════════════════════
-    const btnTop = document.getElementById('btn-top');
-    window.addEventListener('scroll', () => {
-        const scrollTop = window.scrollY;
-        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-        if (docHeight <= 0) return;
-        const pct = Math.min(100, Math.round((scrollTop / docHeight) * 100));
-        document.getElementById('scroll-progress').style.width = pct + '%';
-        btnTop.classList.toggle('visible', scrollTop > 400);
-    }, { passive: true });
-
-    // Cerrar lightbox con Escape
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrarLightbox(); });
-    </script>
+// ── SCROLL PROGRESS ───────────────────────────────────────────
+window.addEventListener('scroll',()=>{
+  const st=window.scrollY,dh=document.documentElement.scrollHeight,wh=window.innerHeight;
+  if(dh<=wh)return;
+  document.getElementById('scroll-progress').style.width=Math.min(100,Math.round(st/(dh-wh)*100))+'%';
+});
+</script>
 </body>
 </html>
